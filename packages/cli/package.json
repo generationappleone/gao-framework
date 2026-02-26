@@ -1,0 +1,36 @@
+{
+    "name": "@gao/cli",
+    "version": "0.1.0",
+    "description": "Developer tooling and Code generation for the GAO Framework",
+    "type": "module",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "bin": {
+        "gao": "dist/cli.js"
+    },
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc --watch",
+        "test": "vitest run --passWithNoTests",
+        "typecheck": "tsc --noEmit",
+        "lint": "biome check ."
+    },
+    "dependencies": {
+        "@gao/core": "workspace:*",
+        "@gao/http": "workspace:*",
+        "@gao/orm": "workspace:*",
+        "@gao/security": "workspace:*",
+        "chalk": "^5.4.0",
+        "commander": "^12.1.0",
+        "handlebars": "^4.7.8"
+    },
+    "devDependencies": {
+        "@types/node": "^22.0.0",
+        "typescript": "^5.7.0",
+        "vitest": "^3.0.0",
+        "@biomejs/biome": "^1.9.0"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}

@@ -1,0 +1,100 @@
+﻿
+> @gao/testing@0.1.0 test X:\Project\gao-framework\framework\packages\testing
+> vitest run
+
+
+[1m[46m RUN [49m[22m [36mv3.2.4 [39m[90mX:/Project/gao-framework/framework/packages/testing[39m
+
+ [32mΓ£ô[39m tests/utils.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [31mΓ¥»[39m tests/integration.test.ts [2m([22m[2m4 tests[22m[2m | [22m[33m4 skipped[39m[2m)[22m[32m 33[2mms[22m[39m
+   [2m[90mΓåô[39m[22m Framework Integration[2m > [22mshould start with an empty user list
+   [2m[90mΓåô[39m[22m Framework Integration[2m > [22mshould create a new user
+   [2m[90mΓåô[39m[22m Framework Integration[2m > [22mshould return error for invalid data
+   [2m[90mΓåô[39m[22m Framework Integration[2m > [22mshould list users after creation
+node.exe : 
+At C:\Users\Generation Apple 
+One\AppData\Roaming\npm\pnpm.ps1:24 
+char:5
++     & "node$exe"  "$basedir/node_m
+odules/pnpm/bin/pnpm.cjs" $args
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSp 
+   ecified: (:String) [], RemoteEx  
+  ception
+    + FullyQualifiedErrorId : Nativ 
+   eCommandError
+ 
+[31mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[39m[1m[41
+m Failed Suites 1 [49m[22m[31mΓÄ»
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[39m
+
+[41m[1m FAIL [22m[49m 
+tests/integration.test.ts[2m > 
+[22mFramework Integration
+[31m[1mInternalError[22m: Config 
+validation failed:
+  - app.port: Number must be 
+greater than or equal to 1
+
+Check your gao.config.ts file. GAO 
+does NOT use .env files.[39m
+[90m [2mΓ¥»[22m validateConfig ..
+/core/src/config.ts:[2m160:11[22m
+[39m
+[90m [2mΓ¥»[22m loadConfig ../cor
+e/src/config.ts:[2m94:21[22m[39m
+[90m [2mΓ¥»[22m 
+GaoApplication.boot ../core/src/appl
+ication.ts:[2m75:35[22m[39m
+[36m [2mΓ¥»[22m createTestApp 
+src/test-app.ts:[2m55:15[22m[39m
+    [90m 53| [39m    }[33m;[39m
+    [90m 54| [39m
+    [90m 55| [39m    
+[35mawait[39m app[33m.[39m[34mb
+oot[39m(configOptions)[33m;[39m
+    [90m   | [39m              
+[31m^[39m
+    [90m 56| [39m
+    [90m 57| [39m    
+[35mreturn[39m app[33m;[39m
+[90m [2mΓ¥»[22m tests/integration
+.test.ts:[2m33:21[22m[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+ΓÄ»ΓÄ»ΓÄ»[1/2]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m 
+tests/integration.test.ts[2m > 
+[22mFramework Integration
+[31m[1mTypeError[22m: Cannot 
+read properties of undefined 
+(reading 'shutdown')[39m
+[36m [2mΓ¥»[22m tests/integration
+.test.ts:[2m65:19[22m[39m
+    [90m 63| [39m    
+[34mafterAll[39m([35masync[39m 
+() [33m=>[39m {
+    [90m 64| [39m        
+[35mawait[39m db[33m.[39m[34mte
+ardown[39m()[33m;[39m
+    [90m 65| [39m        
+[35mawait[39m app[33m.[39m[34ms
+hutdown[39m()[33m;[39m
+    [90m   | [39m                 
+ [31m^[39m
+    [90m 66| [39m    })[33m;[39m
+    [90m 67| [39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+ΓÄ»ΓÄ»ΓÄ»[2/2]ΓÄ»[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m3 passed[39m[22m[2m | [22m[33m4 skipped[39m[90m (7)[39m
+[2m   Start at [22m 09:28:39
+[2m   Duration [22m 3.47s[2m (transform 911ms, setup 0ms, collect 3.14s, tests 48ms, environment 0ms, prepare 852ms)[22m
+

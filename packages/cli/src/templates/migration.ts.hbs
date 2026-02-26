@@ -1,0 +1,17 @@
+import { Schema } from '@gao/orm';
+
+export async function up() {
+await Schema.create('{{tableName}}', (table) => {
+table.uuid('id').primary();
+table.string('name').nullable(false);
+
+// Default audit columns
+table.timestamp('created_at').defaultNow();
+table.timestamp('updated_at').defaultNow();
+table.timestamp('deleted_at').nullable(true);
+});
+}
+
+export async function down() {
+await Schema.drop('{{tableName}}');
+}

@@ -1,0 +1,40 @@
+{
+  "name": "@gao/orm",
+  "version": "0.1.0",
+  "description": "GAO Framework — Type-Safe Data Layer: Query Builder, Models, Migrations",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "typecheck": "tsc --noEmit",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@gao/core": "workspace:*",
+    "better-sqlite3": "^12.6.2",
+    "mariadb": "^3.5.1",
+    "mysql2": "^3.18.0",
+    "pg": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^25.3.0",
+    "@types/pg": "^8.16.0",
+    "rimraf": "^6.0.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  },
+  "peerDependencies": {
+    "typescript": ">=5.7.0"
+  }
+}

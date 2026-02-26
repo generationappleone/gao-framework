@@ -1,0 +1,9 @@
+import { BaseModel, Table, Column, DataType } from '@gao/orm';
+
+@Table('{{tableName}}')
+export class {{name}} extends BaseModel {
+@Column({ type: DataType.String, nullable: false })
+declare name: string;
+
+// Add more columns
+}

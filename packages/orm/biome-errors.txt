@@ -1,0 +1,176 @@
+.\tests\query-builder.test.ts:1:4 parse ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × unterminated template literal
+  
+    > 1 │ ```typescript
+        │    ^^^^^^^^^^
+    > 2 │ import { describe, it, expect, vi, beforeEach } from 'vitest';
+    > 3 │ import type { DatabaseDriver } from '../src/drivers/driver.interface.js';
+    > 4 │ import { QueryBuilder } from '../src/query-builder.js';
+         ...
+  > 101 │     expect(mockDriver.query).toHaveBeenCalledWith('SELECT * FROM "users" LIMIT 1', []);
+  > 102 │   });
+  > 103 │ });
+  > 104 │ 
+        │ 
+  
+
+.\tests\query-builder.test.ts:1:1 lint/style/noUnusedTemplateLiteral  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━
+
+  × Do not use template literals if interpolation and special-character handling are not needed.
+  
+  > 1 │ ```typescript
+      │ ^^
+    2 │ import { describe, it, expect, vi, beforeEach } from 'vitest';
+    3 │ import type { DatabaseDriver } from '../src/drivers/driver.interface.js';
+  
+  i Unsafe fix: Replace with string literal
+  
+      1     │ - ```typescript
+          1 │ + ''`typescript
+      2   2 │   import { describe, it, expect, vi, beforeEach } from 'vitest';
+      3   3 │   import type { DatabaseDriver } from '../src/drivers/driver.interface.js';
+  
+
+.\tests\query-builder.test.ts:1:4 parse ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × unterminated template literal
+  
+    > 1 │ ```typescript
+        │    ^^^^^^^^^^
+    > 2 │ import { describe, it, expect, vi, beforeEach } from 'vitest';
+    > 3 │ import type { DatabaseDriver } from '../src/drivers/driver.interface.js';
+    > 4 │ import { QueryBuilder } from '../src/query-builder.js';
+         ...
+  > 101 │     expect(mockDriver.query).toHaveBeenCalledWith('SELECT * FROM "users" LIMIT 1', []);
+  > 102 │   });
+  > 103 │ });
+  > 104 │ 
+        │ 
+  
+
+.\tests\query-builder.test.ts format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Code formatting aborted due to parsing errors. To format code with errors, enable the 'formatter.formatWithErrors' option.
+  
+
+.\src\drivers\sqlite.ts:51:18 lint/style/noNonNullAssertion  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    49 │   async query<T = unknown>(sql: string, params: unknown[] = []): Promise<T[]> {
+    50 │     this.ensureConnected();
+  > 51 │     const stmt = this.db!.prepare(sql);
+       │                  ^^^^^^^^
+    52 │     // all() returns an array of objects
+    53 │     return stmt.all(params) as T[];
+  
+  i Unsafe fix: Replace with optional chain operator ?. This operator includes runtime checks, so it is safer than the compile-only non-null assertion operator
+  
+     49  49 │     async query<T = unknown>(sql: string, params: unknown[] = []): Promise<T[]> {
+     50  50 │       this.ensureConnected();
+     51     │ - ····const·stmt·=·this.db!.prepare(sql);
+         51 │ + ····const·stmt·=·this.db?.prepare(sql);
+     52  52 │       // all() returns an array of objects
+     53  53 │       return stmt.all(params) as T[];
+  
+
+.\src\drivers\sqlite.ts:58:18 lint/style/noNonNullAssertion  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    56 │   async execute(sql: string, params: unknown[] = []): Promise<ExecuteResult> {
+    57 │     this.ensureConnected();
+  > 58 │     const stmt = this.db!.prepare(sql);
+       │                  ^^^^^^^^
+    59 │     const info = stmt.run(params);
+    60 │ 
+  
+  i Unsafe fix: Replace with optional chain operator ?. This operator includes runtime checks, so it is safer than the compile-only non-null assertion operator
+  
+     56  56 │     async execute(sql: string, params: unknown[] = []): Promise<ExecuteResult> {
+     57  57 │       this.ensureConnected();
+     58     │ - ····const·stmt·=·this.db!.prepare(sql);
+         58 │ + ····const·stmt·=·this.db?.prepare(sql);
+     59  59 │       const info = stmt.run(params);
+     60  60 │   
+  
+
+.\src\query-builder.ts:33:36 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Unexpected any. Specify a different type.
+  
+    31 │ }
+    32 │ 
+  > 33 │ export class QueryBuilder<TModel = any> {
+       │                                    ^^^
+    34 │   private _selects: string[] = ['*'];
+    35 │   private _from = '';
+  
+  i any disables many type checking rules. Its use should be avoided.
+  
+
+.\src\query-builder.ts:64:42 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Unexpected any. Specify a different type.
+  
+    62 │   }
+    63 │ 
+  > 64 │   where(column: string, operatorOrValue: any, value?: any): this {
+       │                                          ^^^
+    65 │     if (value === undefined) {
+    66 │       this._wheres.push({ column, operator: '=', value: operatorOrValue, boolean: 'AND' });
+  
+  i any disables many type checking rules. Its use should be avoided.
+  
+
+.\src\query-builder.ts:64:55 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Unexpected any. Specify a different type.
+  
+    62 │   }
+    63 │ 
+  > 64 │   where(column: string, operatorOrValue: any, value?: any): this {
+       │                                                       ^^^
+    65 │     if (value === undefined) {
+    66 │       this._wheres.push({ column, operator: '=', value: operatorOrValue, boolean: 'AND' });
+  
+  i any disables many type checking rules. Its use should be avoided.
+  
+
+.\src\query-builder.ts:73:44 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Unexpected any. Specify a different type.
+  
+    71 │   }
+    72 │ 
+  > 73 │   orWhere(column: string, operatorOrValue: any, value?: any): this {
+       │                                            ^^^
+    74 │     if (value === undefined) {
+    75 │       this._wheres.push({ column, operator: '=', value: operatorOrValue, boolean: 'OR' });
+  
+  i any disables many type checking rules. Its use should be avoided.
+  
+
+.\src\query-builder.ts:73:57 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Unexpected any. Specify a different type.
+  
+    71 │   }
+    72 │ 
+  > 73 │   orWhere(column: string, operatorOrValue: any, value?: any): this {
+       │                                                         ^^^
+    74 │     if (value === undefined) {
+    75 │       this._wheres.push({ column, operator: '=', value: operatorOrValue, boolean: 'OR' });
+  
+  i any disables many type checking rules. Its use should be avoided.
+  
+
+Checked 16 files in 52ms. No fixes applied.
+Found 9 errors.
+Found 2 warnings.
+check ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Some errors were emitted while running checks.
+  
+

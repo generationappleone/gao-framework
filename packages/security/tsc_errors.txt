@@ -1,0 +1,4 @@
+src/middleware/cors.ts(19,11): error TS2322: Type 'string | readonly string[]' is not assignable to type 'string'.
+  Type 'readonly string[]' is not assignable to type 'string'.
+src/middleware/xss-guard.ts(29,38): error TS2345: Argument of type 'Window' is not assignable to parameter of type 'WindowLike'.
+  Type 'Window' is missing the following properties from type 'Pick<typeof globalThis, "DocumentFragment" | "HTMLTemplateElement" | "Node" | "Element" | "NodeFilter" | "NamedNodeMap" | "HTMLFormElement" | "DOMParser">': DocumentFragment, HTMLTemplateElement, Node, Element, and 4 more.

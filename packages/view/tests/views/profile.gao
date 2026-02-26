@@ -1,0 +1,10 @@
+<@ layout('master') @>
+
+<@ section('content') @>
+    <h1>User Profile</h1>
+    <p>Name: ${user.name}</p>
+<@ endsection() @>
+
+<@ section('footer') @>
+    <p>Profile Footer</p>
+<@ endsection() @>

@@ -1,0 +1,39 @@
+{
+    "name": "@gao/testing",
+    "version": "0.1.0",
+    "description": "GAO Framework — Testing utilities: test app factory, mock db, custom assertions",
+    "type": "module",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "tsc --project tsconfig.json",
+        "test": "vitest run",
+        "typecheck": "tsc --noEmit",
+        "lint": "biome check ."
+    },
+    "dependencies": {
+        "@gao/core": "workspace:*",
+        "@gao/http": "workspace:*",
+        "@gao/orm": "workspace:*",
+        "@gao/security": "workspace:*",
+        "zod": "^3.23.0"
+    },
+    "devDependencies": {
+        "@types/node": "^22.0.0",
+        "typescript": "^5.7.0",
+        "vitest": "^3.0.0",
+        "@biomejs/biome": "^1.9.0"
+    },
+    "peerDependencies": {
+        "vitest": ">=3.0.0"
+    }
+}

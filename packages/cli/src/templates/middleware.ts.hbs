@@ -1,0 +1,11 @@
+import type { Middleware, GaoRequest, GaoResponse, NextFunction } from '@gao/http';
+
+export class {{name}}Middleware implements Middleware {
+async handle(req: GaoRequest, res: GaoResponse, next: NextFunction) {
+// Pre-handler logic
+
+await next();
+
+// Post-handler logic
+}
+}

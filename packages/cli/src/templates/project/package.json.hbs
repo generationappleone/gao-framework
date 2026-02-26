@@ -1,0 +1,23 @@
+{
+  "name": "{{projectName}}",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "gao dev",
+    "build": "gao build",
+    "start": "bun dist/main.js"
+  },
+  "dependencies": {
+    "@gao/core": "latest",
+    "@gao/http": "latest",
+    "@gao/security": "latest",
+    "@gao/orm": "latest",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0",
+    "@gao/cli": "latest"
+  }
+}

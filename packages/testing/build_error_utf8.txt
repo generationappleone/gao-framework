@@ -1,0 +1,4 @@
+﻿src/assertions.ts(2,30): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+src/mock-db.ts(1,29): error TS2724: '"@gao/orm"' has no exported member named 'SqliteDriver'. Did you mean 'SQLiteDriver'?
+src/mock-db.ts(20,16): error TS2339: Property 'setConnectionManager' does not exist on type 'typeof Schema'.
+src/test-app.ts(1,31): error TS2305: Module '"@gao/core"' has no exported member 'ConfigLoaderOptions'.

@@ -1,0 +1,285 @@
+.\packages\security\src\auth\guard.ts:34:57 lint/complexity/noExcessiveCognitiveComplexity ━━━━━━━━━━
+
+  ! Excessive complexity of 23 detected (max: 15).
+  
+    32 │   return {
+    33 │     name: 'security:auth-guard',
+  > 34 │     handle: async (ctx: GaoContext, next: NextFunction) => {
+       │                                                         ^^^
+    35 │       const payload = await verifyRequestTokens(ctx, jwtService);
+    36 │ 
+  
+  i Please refactor this function to reduce its complexity score from 23 to the max allowed complexity 15.
+  
+
+.\packages\security\src\crypto\field-encrypt.ts:37:65 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━━
+
+  × Unexpected any. Specify a different type.
+  
+    35 │  * The underlying ORM (Phase 3) will read this metadata.
+    36 │  */
+  > 37 │ export function Encrypted(options: EncryptedFieldOptions = {}): any {
+       │                                                                 ^^^
+    38 │   return (target: any, propertyKey: string | symbol) => {
+    39 │     // We use a property on the target constructor (or prototype) to register fields.
+  
+  i any disables many type checking rules. Its use should be avoided.
+  
+
+.\packages\security\src\crypto\field-encrypt.ts:38:19 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━━
+
+  × Unexpected any. Specify a different type.
+  
+    36 │  */
+    37 │ export function Encrypted(options: EncryptedFieldOptions = {}): any {
+  > 38 │   return (target: any, propertyKey: string | symbol) => {
+       │                   ^^^
+    39 │     // We use a property on the target constructor (or prototype) to register fields.
+    40 │     // In strict mode without reflect-metadata, we can just attach a hidden map to the prototype.
+  
+  i any disables many type checking rules. Its use should be avoided.
+  
+
+.\packages\security\src\crypto\field-encrypt.ts:41:33 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━━
+
+  × Unexpected any. Specify a different type.
+  
+    39 │     // We use a property on the target constructor (or prototype) to register fields.
+    40 │     // In strict mode without reflect-metadata, we can just attach a hidden map to the prototype.
+  > 41 │     const prototype = target as any;
+       │                                 ^^^
+    42 │     if (!prototype[ENCRYPTED_FIELDS_META_KEY]) {
+    43 │       Object.defineProperty(prototype, ENCRYPTED_FIELDS_META_KEY, {
+  
+  i any disables many type checking rules. Its use should be avoided.
+  
+
+.\packages\security\src\crypto\field-encrypt.ts:66:69 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━━
+
+  × Unexpected any. Specify a different type.
+  
+    64 │   if (!registry) return entity; // Nothing to encrypt
+    65 │ 
+  > 66 │   const result = Object.assign(Object.create(prototype), entity) as any;
+       │                                                                     ^^^
+    67 │ 
+    68 │   for (const [field, options] of Object.entries(registry)) {
+  
+  i any disables many type checking rules. Its use should be avoided.
+  
+
+.\packages\security\src\crypto\field-encrypt.ts:110:69 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━
+
+  × Unexpected any. Specify a different type.
+  
+    108 │   if (!registry) return entity; // Nothing to decrypt
+    109 │ 
+  > 110 │   const result = Object.assign(Object.create(prototype), entity) as any;
+        │                                                                     ^^^
+    111 │ 
+    112 │   for (const field of Object.keys(registry)) {
+  
+  i any disables many type checking rules. Its use should be avoided.
+  
+
+.\packages\security\src\middleware\ddos-shield.ts:68:57 lint/complexity/noExcessiveCognitiveComplexity ━━━━━━━━━━
+
+  ! Excessive complexity of 17 detected (max: 15).
+  
+    66 │   return {
+    67 │     name: 'security:ddos-shield',
+  > 68 │     handle: async (ctx: GaoContext, next: NextFunction) => {
+       │                                                         ^^^
+    69 │       const ip = getIp(ctx);
+    70 │ 
+  
+  i Please refactor this function to reduce its complexity score from 17 to the max allowed complexity 15.
+  
+
+.\packages\security\src\middleware\validator.ts:36:57 lint/complexity/noExcessiveCognitiveComplexity ━━━━━━━━━━
+
+  ! Excessive complexity of 30 detected (max: 15).
+  
+    34 │   return {
+    35 │     name: 'security:validator',
+  > 36 │     handle: async (ctx: GaoContext, next: NextFunction) => {
+       │                                                         ^^^
+    37 │       // In a real adapter, request object contains these
+    38 │       const request = ctx.metadata.request as
+  
+  i Please refactor this function to reduce its complexity score from 30 to the max allowed complexity 15.
+  
+
+.\packages\security\src\middleware\csrf.ts:107:32 lint/suspicious/noAssignInExpressions ━━━━━━━━━━━━
+
+  × The assignment should not be in an expression.
+  
+    105 │         | undefined;
+    106 │ 
+  > 107 │       const responseHeaders = (ctx.metadata.responseHeaders ??= {}) as Record<string, string>;
+        │                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    108 │ 
+    109 │       if (!request) return next();
+  
+  i The use of assignments in expressions is confusing.
+    Expressions are often considered as side-effect free.
+  
+
+.\packages\security\src\middleware\rate-limiter.ts:154:24 lint/suspicious/noAssignInExpressions ━━━━━━━━━━
+
+  × The assignment should not be in an expression.
+  
+    153 │       // Add rate limit headers
+  > 154 │       const headers = (ctx.metadata.responseHeaders ??= {}) as Record<string, string>;
+        │                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    155 │       headers['X-RateLimit-Limit'] = points.toString();
+    156 │       headers['X-RateLimit-Remaining'] = Math.max(0, points - count).toString();
+  
+  i The use of assignments in expressions is confusing.
+    Expressions are often considered as side-effect free.
+  
+
+.\packages\security\tests\validator.test.ts:24:37 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━━━━━━
+
+  × Unexpected any. Specify a different type.
+  
+    23 │     // Ensure body wasn't mangled
+  > 24 │     expect((ctx.metadata.request as any).body).toEqual({ username: 'testuser', age: 25 });
+       │                                     ^^^
+    25 │   });
+    26 │ 
+  
+  i any disables many type checking rules. Its use should be avoided.
+  
+
+.\packages\security\tests\validator.test.ts:38:37 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━━━━━━
+
+  × Unexpected any. Specify a different type.
+  
+    37 │     // Should strip malicious
+  > 38 │     expect((ctx.metadata.request as any).body).toEqual({ username: 'testuser', age: 25 });
+       │                                     ^^^
+    39 │   });
+    40 │ 
+  
+  i any disables many type checking rules. Its use should be avoided.
+  
+
+.\packages\security\tests\validator.test.ts:51:19 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━━━━━━
+
+  × Unexpected any. Specify a different type.
+  
+    49 │       await middleware.handle(ctx, next);
+    50 │       expect(true).toBe(false); // Should not reach here
+  > 51 │     } catch (err: any) {
+       │                   ^^^
+    52 │       expect(err).toBeInstanceOf(ValidationError);
+    53 │       expect(err.statusCode).toBe(422);
+  
+  i any disables many type checking rules. Its use should be avoided.
+  
+
+.\packages\security\tests\validator.test.ts:72:37 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━━━━━━
+
+  × Unexpected any. Specify a different type.
+  
+    71 │     // Check if transform works
+  > 72 │     expect((ctx.metadata.request as any).query.page).toBe(2);
+       │                                     ^^^
+    73 │   });
+    74 │ });
+  
+  i any disables many type checking rules. Its use should be avoided.
+  
+
+.\packages\security\src\middleware\cors.ts:35:32 lint/suspicious/noAssignInExpressions ━━━━━━━━━━━━━
+
+  × The assignment should not be in an expression.
+  
+    33 │         | { method: string; headers: Record<string, string> }
+    34 │         | undefined;
+  > 35 │       const responseHeaders = (ctx.metadata.responseHeaders ??= {}) as Record<string, string>;
+       │                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    36 │ 
+    37 │       if (!request) {
+  
+  i The use of assignments in expressions is confusing.
+    Expressions are often considered as side-effect free.
+  
+
+.\packages\security\src\middleware\cors.ts:30:57 lint/complexity/noExcessiveCognitiveComplexity ━━━━━━━━━━
+
+  ! Excessive complexity of 32 detected (max: 15).
+  
+    28 │   return {
+    29 │     name: 'security:cors',
+  > 30 │     handle: async (ctx: GaoContext, next: NextFunction) => {
+       │                                                         ^^^
+    31 │       // Expecting standard Request/Response info in ctx metadata (passed from HTTP adapter)
+    32 │       const request = ctx.metadata.request as
+  
+  i Please refactor this function to reduce its complexity score from 32 to the max allowed complexity 15.
+  
+
+.\packages\security\src\middleware\xss-guard.ts:29:46 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━━
+
+  × Unexpected any. Specify a different type.
+  
+    28 │   const window = new JSDOM('').window;
+  > 29 │   purifyInstance = createDOMPurify(window as any) as unknown as Sanitizer;
+       │                                              ^^^
+    30 │   return purifyInstance;
+    31 │ }
+  
+  i any disables many type checking rules. Its use should be avoided.
+  
+
+.\packages\security\src\middleware\xss-guard.ts:95:34 lint/suspicious/noAssignInExpressions ━━━━━━━━━━
+
+  × The assignment should not be in an expression.
+  
+    94 │         // Update CSP header to include nonce
+  > 95 │         const responseHeaders = (ctx.metadata.responseHeaders ??= {}) as Record<string, string>;
+       │                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    96 │         const existingCsp = responseHeaders['Content-Security-Policy'];
+    97 │         if (existingCsp) {
+  
+  i The use of assignments in expressions is confusing.
+    Expressions are often considered as side-effect free.
+  
+
+.\packages\security\tests\field-encrypt.test.ts:33:44 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━━
+
+  × Unexpected any. Specify a different type.
+  
+    32 │   it('should register metadata on the prototype', () => {
+  > 33 │     const proto = UserProfile.prototype as any;
+       │                                            ^^^
+    34 │     expect(proto[ENCRYPTED_FIELDS_META_KEY]).toBeDefined();
+    35 │     expect(proto[ENCRYPTED_FIELDS_META_KEY].ssn).toBeDefined();
+  
+  i any disables many type checking rules. Its use should be avoided.
+  
+
+.\packages\security\tests\guard.test.ts:41:34 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Unexpected any. Specify a different type.
+  
+    39 │     await middleware.handle(ctx, next);
+    40 │     expect(next).toHaveBeenCalledTimes(1);
+  > 41 │     expect((ctx.metadata.user as any).id).toBe('user-1');
+       │                                  ^^^
+    42 │   });
+    43 │ 
+  
+  i any disables many type checking rules. Its use should be avoided.
+  
+
+Checked 61 files in 69ms. No fixes applied.
+Found 16 errors.
+Found 4 warnings.
+check ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Some errors were emitted while running checks.
+  
+

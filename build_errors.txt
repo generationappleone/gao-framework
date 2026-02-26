@@ -1,0 +1,17 @@
+﻿packages/core/src/application.ts(125,13): error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+packages/core/src/application.ts(128,9): error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+packages/core/src/application.ts(129,9): error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+packages/core/src/application.ts(132,9): error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+packages/core/src/application.ts(139,9): error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+packages/core/src/cache.ts(22,48): error TS2304: Cannot find name 'setInterval'.
+packages/core/src/cache.ts(26,32): error TS2304: Cannot find name 'setInterval'.
+packages/core/src/cache.ts(85,13): error TS2304: Cannot find name 'clearInterval'.
+packages/core/src/config.ts(81,17): error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+packages/core/src/config.ts(81,43): error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+packages/core/src/config.ts(114,31): error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+packages/core/src/config.ts(123,34): error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+packages/core/src/config.ts(141,24): error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+packages/core/src/config.ts(141,50): error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+packages/core/src/context.ts(10,35): error TS2307: Cannot find module 'node:async_hooks' or its corresponding type declarations.
+packages/core/src/context.ts(11,28): error TS2307: Cannot find module 'node:crypto' or its corresponding type declarations.
+packages/core/src/errors.ts(50,17): error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.

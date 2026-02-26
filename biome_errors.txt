@@ -1,0 +1,908 @@
+﻿node.exe : .\packages\core\src\conta
+iner.ts:65:9 lint/style/useTemplate 
+ FIXABLE  ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓö
+üΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓö
+üΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Users\Generation Apple One\A ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSp 
+   ecified: (.\packages\core...Γöü  
+  ΓöüΓöüΓöüΓöü:String) [], Remote   
+ Exception
+    + FullyQualifiedErrorId : Nativ 
+   eCommandError
+ 
+
+  ├ù Template literals are 
+preferred over string concatenation.
+  
+    63 Γöé       const tokenName = 
+typeof token === 'symbol' ? 
+token.description : token;
+    64 Γöé       throw new 
+InternalError(
+  > 65 Γöé         `Service not 
+registered: ${tokenName ?? 
+'unknown'}. ` +
+       Γöé         ^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^
+  > 66 Γöé           'Did you 
+forget to register it in the 
+container?',
+       Γöé           ^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    67 Γöé       );
+    68 Γöé     }
+  
+  i Unsafe fix: Use a template 
+literal.
+  
+     63  63 Γöé         const 
+tokenName = typeof token === 
+'symbol' ? token.description : 
+token;
+     64  64 Γöé         throw new 
+InternalError(
+     65     Γöé - ┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖`S
+ervice┬╖not┬╖registered:┬╖${tokenNam
+e┬╖??┬╖'unknown'}.┬╖`┬╖+
+     66     Γöé - ┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖
+┬╖'Did┬╖you┬╖forget┬╖to┬╖register┬╖i
+t┬╖in┬╖the┬╖container?',
+         65 Γöé + ┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖`S
+ervice┬╖not┬╖registered:┬╖${tokenNam
+e┬╖??┬╖'unknown'}.┬╖Did┬╖you┬╖forget
+┬╖to┬╖register┬╖it┬╖in┬╖the┬╖contain
+er?`,
+     67  66 Γöé         );
+     68  67 Γöé       }
+  
+
+.\packages\core\src\container.ts:77:
+9 lint/style/useTemplate  FIXABLE  Γ
+öüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓ
+öüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓ
+öüΓöüΓöüΓöüΓöü
+
+  ├ù Template literals are 
+preferred over string concatenation.
+  
+    75 Γöé         .join(' ΓåÆ ');
+    76 Γöé       throw new 
+InternalError(
+  > 77 Γöé         `Circular 
+dependency detected: ${chain} ΓåÆ 
+${tokenName ?? 'unknown'}. ` +
+       Γöé         ^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^
+  > 78 Γöé           'Refactor to 
+break the cycle.',
+       Γöé           
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    79 Γöé       );
+    80 Γöé     }
+  
+  i Unsafe fix: Use a template 
+literal.
+  
+     75  75 Γöé           .join(' 
+ΓåÆ ');
+     76  76 Γöé         throw new 
+InternalError(
+     77     Γöé - ┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖`C
+ircular┬╖dependency┬╖detected:┬╖${ch
+ain}┬╖ΓåÆ┬╖${tokenName┬╖??┬╖'unknown
+'}.┬╖`┬╖+
+     78     Γöé - ┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖
+┬╖'Refactor┬╖to┬╖break┬╖the┬╖cycle.'
+,
+         77 Γöé + ┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖`C
+ircular┬╖dependency┬╖detected:┬╖${ch
+ain}┬╖ΓåÆ┬╖${tokenName┬╖??┬╖'unknown
+'}.┬╖Refactor┬╖to┬╖break┬╖the┬╖cycle
+.`,
+     79  78 Γöé         );
+     80  79 Γöé       }
+  
+
+.\packages\core\src\plugin.ts:28:9 
+lint/style/useTemplate  FIXABLE  Γöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+
+  ├ù Template literals are 
+preferred over string concatenation.
+  
+    26 Γöé     if (this.booted) {
+    27 Γöé       throw new 
+InternalError(
+  > 28 Γöé         `Cannot register 
+plugin "${plugin.name}" after boot. 
+` +
+       Γöé         ^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^
+  > 29 Γöé           'Register all 
+plugins before calling app.boot().',
+       Γöé           ^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    30 Γöé       );
+    31 Γöé     }
+  
+  i Unsafe fix: Use a template 
+literal.
+  
+     26  26 Γöé       if 
+(this.booted) {
+     27  27 Γöé         throw new 
+InternalError(
+     28     Γöé - ┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖`C
+annot┬╖register┬╖plugin┬╖"${plugin.n
+ame}"┬╖after┬╖boot.┬╖`┬╖+
+     29     Γöé - ┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖
+┬╖'Register┬╖all┬╖plugins┬╖before┬╖c
+alling┬╖app.boot().',
+         28 Γöé + ┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖`C
+annot┬╖register┬╖plugin┬╖"${plugin.n
+ame}"┬╖after┬╖boot.┬╖Register┬╖all┬╖
+plugins┬╖before┬╖calling┬╖app.boot()
+.`,
+     30  29 Γöé         );
+     31  30 Γöé       }
+  
+
+.\packages\core\tests\context.test.t
+s:34:28 
+lint/complexity/useLiteralKeys  
+FIXABLE  ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöü
+
+  ├ù The computed expression can be 
+simplified without the use of a 
+string literal.
+  
+    32 Γöé       
+setContextMetadata('foo', 'bar');
+    33 Γöé       const ctx = 
+getContext();
+  > 34 Γöé       expect(ctx?.metadat
+a['foo']).toBe('bar');
+       Γöé                          
+  ^^^^^
+    35 Γöé     });
+    36 Γöé   });
+  
+  i Unsafe fix: Use a literal key 
+instead.
+  
+    32 32 Γöé         
+setContextMetadata('foo', 'bar');
+    33 33 Γöé         const ctx = 
+getContext();
+    34    Γöé - ┬╖┬╖┬╖┬╖┬╖┬╖expect(c
+tx?.metadata['foo']).toBe('bar');
+       34 Γöé + ┬╖┬╖┬╖┬╖┬╖┬╖expect(c
+tx?.metadata.foo).toBe('bar');
+    35 35 Γöé       });
+    36 36 Γöé     });
+  
+
+.\packages\core\src\router.ts:240:11
+ lint/complexity/noExcessiveCognitiv
+eComplexity ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+
+  ! Excessive complexity of 21 
+detected (max: 15).
+  
+    238 Γöé   // ΓöÇΓöÇΓöÇ Private 
+helpers ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓ
+öÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓ
+öÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓ
+öÇΓöÇΓöÇΓöÇ
+    239 Γöé 
+  > 240 Γöé   private findNode(
+        Γöé           ^^^^^^^^
+    241 Γöé     node: RadixNode,
+    242 Γöé     segments: string[],
+  
+  i Please refactor this function 
+to reduce its complexity score from 
+21 to the max allowed complexity 15.
+  
+
+.\packages\core\src\config.ts:77:51 
+lint/complexity/useLiteralKeys  
+FIXABLE  ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöü
+
+  ├ù The computed expression can be 
+simplified without the use of a 
+string literal.
+  
+    75 Γöé   const environment =
+    76 Γöé     options.environment 
+??
+  > 77 Γöé     (typeof process !== 
+'undefined' ? 
+process.env['NODE_ENV'] : 
+undefined) ??
+       Γöé                          
+                         ^^^^^^^^^^
+    78 Γöé     'development';
+    79 Γöé 
+  
+  i Unsafe fix: Use a literal key 
+instead.
+  
+     75  75 Γöé     const 
+environment =
+     76  76 Γöé       
+options.environment ??
+     77     Γöé - ┬╖┬╖┬╖┬╖(typeof┬╖p
+rocess┬╖!==┬╖'undefined'┬╖?┬╖process
+.env['NODE_ENV']┬╖:┬╖undefined)┬╖??
+         77 Γöé + ┬╖┬╖┬╖┬╖(typeof┬╖p
+rocess┬╖!==┬╖'undefined'┬╖?┬╖process
+.env.NODE_ENV┬╖:┬╖undefined)┬╖??
+     78  78 Γöé       'development';
+     79  79 Γöé   
+  
+
+.\packages\core\src\config.ts:135:15
+ lint/complexity/useLiteralKeys  
+FIXABLE  ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+Γöü
+
+  ├ù The computed expression can be 
+simplified without the use of a 
+string literal.
+  
+    134 Γöé   // Ensure app section 
+exists
+  > 135 Γöé   if (!config['app'] || 
+typeof config['app'] !== 'object') {
+        Γöé               ^^^^^
+    136 Γöé     config['app'] = {};
+    137 Γöé   }
+  
+  i Unsafe fix: Use a literal key 
+instead.
+  
+    133 133 Γöé   
+    134 134 Γöé     // Ensure app 
+section exists
+    135     Γöé - ┬╖┬╖if┬╖(!config['
+app']┬╖||┬╖typeof┬╖config['app']┬╖!=
+=┬╖'object')┬╖{
+        135 Γöé + ┬╖┬╖if┬╖(!config.a
+pp┬╖||┬╖typeof┬╖config['app']┬╖!==┬╖
+'object')┬╖{
+    136 136 Γöé       config['app'] 
+= {};
+    137 137 Γöé     }
+  
+
+.\packages\core\src\config.ts:135:39
+ lint/complexity/useLiteralKeys  
+FIXABLE  ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+Γöü
+
+  ├ù The computed expression can be 
+simplified without the use of a 
+string literal.
+  
+    134 Γöé   // Ensure app section 
+exists
+  > 135 Γöé   if (!config['app'] || 
+typeof config['app'] !== 'object') {
+        Γöé                         
+              ^^^^^
+    136 Γöé     config['app'] = {};
+    137 Γöé   }
+  
+  i Unsafe fix: Use a literal key 
+instead.
+  
+    133 133 Γöé   
+    134 134 Γöé     // Ensure app 
+section exists
+    135     Γöé - ┬╖┬╖if┬╖(!config['
+app']┬╖||┬╖typeof┬╖config['app']┬╖!=
+=┬╖'object')┬╖{
+        135 Γöé + ┬╖┬╖if┬╖(!config['
+app']┬╖||┬╖typeof┬╖config.app┬╖!==┬╖
+'object')┬╖{
+    136 136 Γöé       config['app'] 
+= {};
+    137 137 Γöé     }
+  
+
+.\packages\core\src\config.ts:136:12
+ lint/complexity/useLiteralKeys  
+FIXABLE  ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+Γöü
+
+  ├ù The computed expression can be 
+simplified without the use of a 
+string literal.
+  
+    134 Γöé   // Ensure app section 
+exists
+    135 Γöé   if (!config['app'] || 
+typeof config['app'] !== 'object') {
+  > 136 Γöé     config['app'] = {};
+        Γöé            ^^^^^
+    137 Γöé   }
+    138 Γöé 
+  
+  i Unsafe fix: Use a literal key 
+instead.
+  
+    134 134 Γöé     // Ensure app 
+section exists
+    135 135 Γöé     if 
+(!config['app'] || typeof 
+config['app'] !== 'object') {
+    136     Γöé - 
+┬╖┬╖┬╖┬╖config['app']┬╖=┬╖{};
+        136 Γöé + 
+┬╖┬╖┬╖┬╖config.app┬╖=┬╖{};
+    137 137 Γöé     }
+    138 138 Γöé   
+  
+
+.\packages\core\src\config.ts:139:28
+ lint/complexity/useLiteralKeys  
+FIXABLE  ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+Γöü
+
+  ├ù The computed expression can be 
+simplified without the use of a 
+string literal.
+  
+    137 Γöé   }
+    138 Γöé 
+  > 139 Γöé   const appConfig = 
+config['app'] as Record<string, 
+unknown>;
+        Γöé                         
+   ^^^^^
+    140 Γöé 
+    141 Γöé   // Override from 
+system env vars
+  
+  i Unsafe fix: Use a literal key 
+instead.
+  
+    137 137 Γöé     }
+    138 138 Γöé   
+    139     Γöé - ┬╖┬╖const┬╖appConf
+ig┬╖=┬╖config['app']┬╖as┬╖Record<str
+ing,┬╖unknown>;
+        139 Γöé + ┬╖┬╖const┬╖appConf
+ig┬╖=┬╖config.app┬╖as┬╖Record<string
+,┬╖unknown>;
+    140 140 Γöé   
+    141 141 Γöé     // Override 
+from system env vars
+  
+
+.\packages\core\src\config.ts:142:11
+ lint/complexity/useLiteralKeys  
+FIXABLE  ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+Γöü
+
+  ├ù The computed expression can be 
+simplified without the use of a 
+string literal.
+  
+    141 Γöé   // Override from 
+system env vars
+  > 142 Γöé   if 
+(env['GAO_APP_NAME']) 
+appConfig['name'] = 
+env['GAO_APP_NAME'];
+        Γöé           ^^^^^^^^^^^^^^
+    143 Γöé   if 
+(env['GAO_APP_PORT']) 
+appConfig['port'] = Number.parseInt(
+env['GAO_APP_PORT'], 10);
+    144 Γöé   if 
+(env['GAO_APP_DEBUG']) 
+appConfig['debug'] = 
+env['GAO_APP_DEBUG'] === 'true';
+  
+  i Unsafe fix: Use a literal key 
+instead.
+  
+    140 140 Γöé   
+    141 141 Γöé     // Override 
+from system env vars
+    142     Γöé - ┬╖┬╖if┬╖(env['GAO_
+APP_NAME'])┬╖appConfig['name']┬╖=┬╖e
+nv['GAO_APP_NAME'];
+        142 Γöé + ┬╖┬╖if┬╖(env.GAO_A
+PP_NAME)┬╖appConfig['name']┬╖=┬╖env[
+'GAO_APP_NAME'];
+    143 143 Γöé     if 
+(env['GAO_APP_PORT']) 
+appConfig['port'] = Number.parseInt(
+env['GAO_APP_PORT'], 10);
+    144 144 Γöé     if 
+(env['GAO_APP_DEBUG']) 
+appConfig['debug'] = 
+env['GAO_APP_DEBUG'] === 'true';
+  
+
+.\packages\core\src\config.ts:142:38
+ lint/complexity/useLiteralKeys  
+FIXABLE  ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+Γöü
+
+  ├ù The computed expression can be 
+simplified without the use of a 
+string literal.
+  
+    141 Γöé   // Override from 
+system env vars
+  > 142 Γöé   if 
+(env['GAO_APP_NAME']) 
+appConfig['name'] = 
+env['GAO_APP_NAME'];
+        Γöé                         
+             ^^^^^^
+    143 Γöé   if 
+(env['GAO_APP_PORT']) 
+appConfig['port'] = Number.parseInt(
+env['GAO_APP_PORT'], 10);
+    144 Γöé   if 
+(env['GAO_APP_DEBUG']) 
+appConfig['debug'] = 
+env['GAO_APP_DEBUG'] === 'true';
+  
+  i Unsafe fix: Use a literal key 
+instead.
+  
+    140 140 Γöé   
+    141 141 Γöé     // Override 
+from system env vars
+    142     Γöé - ┬╖┬╖if┬╖(env['GAO_
+APP_NAME'])┬╖appConfig['name']┬╖=┬╖e
+nv['GAO_APP_NAME'];
+        142 Γöé + ┬╖┬╖if┬╖(env['GAO_
+APP_NAME'])┬╖appConfig.name┬╖=┬╖env[
+'GAO_APP_NAME'];
+    143 143 Γöé     if 
+(env['GAO_APP_PORT']) 
+appConfig['port'] = Number.parseInt(
+env['GAO_APP_PORT'], 10);
+    144 144 Γöé     if 
+(env['GAO_APP_DEBUG']) 
+appConfig['debug'] = 
+env['GAO_APP_DEBUG'] === 'true';
+  
+
+.\packages\core\src\config.ts:142:52
+ lint/complexity/useLiteralKeys  
+FIXABLE  ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+Γöü
+
+  ├ù The computed expression can be 
+simplified without the use of a 
+string literal.
+  
+    141 Γöé   // Override from 
+system env vars
+  > 142 Γöé   if 
+(env['GAO_APP_NAME']) 
+appConfig['name'] = 
+env['GAO_APP_NAME'];
+        Γöé                         
+                           
+^^^^^^^^^^^^^^
+    143 Γöé   if 
+(env['GAO_APP_PORT']) 
+appConfig['port'] = Number.parseInt(
+env['GAO_APP_PORT'], 10);
+    144 Γöé   if 
+(env['GAO_APP_DEBUG']) 
+appConfig['debug'] = 
+env['GAO_APP_DEBUG'] === 'true';
+  
+  i Unsafe fix: Use a literal key 
+instead.
+  
+    140 140 Γöé   
+    141 141 Γöé     // Override 
+from system env vars
+    142     Γöé - ┬╖┬╖if┬╖(env['GAO_
+APP_NAME'])┬╖appConfig['name']┬╖=┬╖e
+nv['GAO_APP_NAME'];
+        142 Γöé + ┬╖┬╖if┬╖(env['GAO_
+APP_NAME'])┬╖appConfig['name']┬╖=┬╖e
+nv.GAO_APP_NAME;
+    143 143 Γöé     if 
+(env['GAO_APP_PORT']) 
+appConfig['port'] = Number.parseInt(
+env['GAO_APP_PORT'], 10);
+    144 144 Γöé     if 
+(env['GAO_APP_DEBUG']) 
+appConfig['debug'] = 
+env['GAO_APP_DEBUG'] === 'true';
+  
+
+.\packages\core\src\config.ts:143:11
+ lint/complexity/useLiteralKeys  
+FIXABLE  ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+Γöü
+
+  ├ù The computed expression can be 
+simplified without the use of a 
+string literal.
+  
+    141 Γöé   // Override from 
+system env vars
+    142 Γöé   if 
+(env['GAO_APP_NAME']) 
+appConfig['name'] = 
+env['GAO_APP_NAME'];
+  > 143 Γöé   if 
+(env['GAO_APP_PORT']) 
+appConfig['port'] = Number.parseInt(
+env['GAO_APP_PORT'], 10);
+        Γöé           ^^^^^^^^^^^^^^
+    144 Γöé   if 
+(env['GAO_APP_DEBUG']) 
+appConfig['debug'] = 
+env['GAO_APP_DEBUG'] === 'true';
+    145 Γöé 
+  
+  i Unsafe fix: Use a literal key 
+instead.
+  
+    141 141 Γöé     // Override 
+from system env vars
+    142 142 Γöé     if 
+(env['GAO_APP_NAME']) 
+appConfig['name'] = 
+env['GAO_APP_NAME'];
+    143     Γöé - ┬╖┬╖if┬╖(env['GAO_
+APP_PORT'])┬╖appConfig['port']┬╖=┬╖N
+umber.parseInt(env['GAO_APP_PORT'],┬
+╖10);
+        143 Γöé + ┬╖┬╖if┬╖(env.GAO_A
+PP_PORT)┬╖appConfig['port']┬╖=┬╖Numb
+er.parseInt(env['GAO_APP_PORT'],┬╖10
+);
+    144 144 Γöé     if 
+(env['GAO_APP_DEBUG']) 
+appConfig['debug'] = 
+env['GAO_APP_DEBUG'] === 'true';
+    145 145 Γöé   
+  
+
+.\packages\core\src\config.ts:143:38
+ lint/complexity/useLiteralKeys  
+FIXABLE  ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+Γöü
+
+  ├ù The computed expression can be 
+simplified without the use of a 
+string literal.
+  
+    141 Γöé   // Override from 
+system env vars
+    142 Γöé   if 
+(env['GAO_APP_NAME']) 
+appConfig['name'] = 
+env['GAO_APP_NAME'];
+  > 143 Γöé   if 
+(env['GAO_APP_PORT']) 
+appConfig['port'] = Number.parseInt(
+env['GAO_APP_PORT'], 10);
+        Γöé                         
+             ^^^^^^
+    144 Γöé   if 
+(env['GAO_APP_DEBUG']) 
+appConfig['debug'] = 
+env['GAO_APP_DEBUG'] === 'true';
+    145 Γöé 
+  
+  i Unsafe fix: Use a literal key 
+instead.
+  
+    141 141 Γöé     // Override 
+from system env vars
+    142 142 Γöé     if 
+(env['GAO_APP_NAME']) 
+appConfig['name'] = 
+env['GAO_APP_NAME'];
+    143     Γöé - ┬╖┬╖if┬╖(env['GAO_
+APP_PORT'])┬╖appConfig['port']┬╖=┬╖N
+umber.parseInt(env['GAO_APP_PORT'],┬
+╖10);
+        143 Γöé + ┬╖┬╖if┬╖(env['GAO_
+APP_PORT'])┬╖appConfig.port┬╖=┬╖Numb
+er.parseInt(env['GAO_APP_PORT'],┬╖10
+);
+    144 144 Γöé     if 
+(env['GAO_APP_DEBUG']) 
+appConfig['debug'] = 
+env['GAO_APP_DEBUG'] === 'true';
+    145 145 Γöé   
+  
+
+.\packages\core\src\config.ts:143:68
+ lint/complexity/useLiteralKeys  
+FIXABLE  ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+Γöü
+
+  ├ù The computed expression can be 
+simplified without the use of a 
+string literal.
+  
+    141 Γöé   // Override from 
+system env vars
+    142 Γöé   if 
+(env['GAO_APP_NAME']) 
+appConfig['name'] = 
+env['GAO_APP_NAME'];
+  > 143 Γöé   if 
+(env['GAO_APP_PORT']) 
+appConfig['port'] = Number.parseInt(
+env['GAO_APP_PORT'], 10);
+        Γöé                         
+                                    
+       ^^^^^^^^^^^^^^
+    144 Γöé   if 
+(env['GAO_APP_DEBUG']) 
+appConfig['debug'] = 
+env['GAO_APP_DEBUG'] === 'true';
+    145 Γöé 
+  
+  i Unsafe fix: Use a literal key 
+instead.
+  
+    141 141 Γöé     // Override 
+from system env vars
+    142 142 Γöé     if 
+(env['GAO_APP_NAME']) 
+appConfig['name'] = 
+env['GAO_APP_NAME'];
+    143     Γöé - ┬╖┬╖if┬╖(env['GAO_
+APP_PORT'])┬╖appConfig['port']┬╖=┬╖N
+umber.parseInt(env['GAO_APP_PORT'],┬
+╖10);
+        143 Γöé + ┬╖┬╖if┬╖(env['GAO_
+APP_PORT'])┬╖appConfig['port']┬╖=┬╖N
+umber.parseInt(env.GAO_APP_PORT,┬╖10
+);
+    144 144 Γöé     if 
+(env['GAO_APP_DEBUG']) 
+appConfig['debug'] = 
+env['GAO_APP_DEBUG'] === 'true';
+    145 145 Γöé   
+  
+
+.\packages\core\src\config.ts:144:11
+ lint/complexity/useLiteralKeys  
+FIXABLE  ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+Γöü
+
+  ├ù The computed expression can be 
+simplified without the use of a 
+string literal.
+  
+    142 Γöé   if 
+(env['GAO_APP_NAME']) 
+appConfig['name'] = 
+env['GAO_APP_NAME'];
+    143 Γöé   if 
+(env['GAO_APP_PORT']) 
+appConfig['port'] = Number.parseInt(
+env['GAO_APP_PORT'], 10);
+  > 144 Γöé   if 
+(env['GAO_APP_DEBUG']) 
+appConfig['debug'] = 
+env['GAO_APP_DEBUG'] === 'true';
+        Γöé           
+^^^^^^^^^^^^^^^
+    145 Γöé 
+    146 Γöé   // Always override 
+environment from detection
+  
+  i Unsafe fix: Use a literal key 
+instead.
+  
+    142 142 Γöé     if 
+(env['GAO_APP_NAME']) 
+appConfig['name'] = 
+env['GAO_APP_NAME'];
+    143 143 Γöé     if 
+(env['GAO_APP_PORT']) 
+appConfig['port'] = Number.parseInt(
+env['GAO_APP_PORT'], 10);
+    144     Γöé - ┬╖┬╖if┬╖(env['GAO_
+APP_DEBUG'])┬╖appConfig['debug']┬╖=┬
+╖env['GAO_APP_DEBUG']┬╖===┬╖'true';
+        144 Γöé + ┬╖┬╖if┬╖(env.GAO_A
+PP_DEBUG)┬╖appConfig['debug']┬╖=┬╖en
+v['GAO_APP_DEBUG']┬╖===┬╖'true';
+    145 145 Γöé   
+    146 146 Γöé     // Always 
+override environment from detection
+  
+
+.\packages\core\src\config.ts:144:39
+ lint/complexity/useLiteralKeys  
+FIXABLE  ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+Γöü
+
+  ├ù The computed expression can be 
+simplified without the use of a 
+string literal.
+  
+    142 Γöé   if 
+(env['GAO_APP_NAME']) 
+appConfig['name'] = 
+env['GAO_APP_NAME'];
+    143 Γöé   if 
+(env['GAO_APP_PORT']) 
+appConfig['port'] = Number.parseInt(
+env['GAO_APP_PORT'], 10);
+  > 144 Γöé   if 
+(env['GAO_APP_DEBUG']) 
+appConfig['debug'] = 
+env['GAO_APP_DEBUG'] === 'true';
+        Γöé                         
+              ^^^^^^^
+    145 Γöé 
+    146 Γöé   // Always override 
+environment from detection
+  
+  i Unsafe fix: Use a literal key 
+instead.
+  
+    142 142 Γöé     if 
+(env['GAO_APP_NAME']) 
+appConfig['name'] = 
+env['GAO_APP_NAME'];
+    143 143 Γöé     if 
+(env['GAO_APP_PORT']) 
+appConfig['port'] = Number.parseInt(
+env['GAO_APP_PORT'], 10);
+    144     Γöé - ┬╖┬╖if┬╖(env['GAO_
+APP_DEBUG'])┬╖appConfig['debug']┬╖=┬
+╖env['GAO_APP_DEBUG']┬╖===┬╖'true';
+        144 Γöé + ┬╖┬╖if┬╖(env['GAO_
+APP_DEBUG'])┬╖appConfig.debug┬╖=┬╖en
+v['GAO_APP_DEBUG']┬╖===┬╖'true';
+    145 145 Γöé   
+    146 146 Γöé     // Always 
+override environment from detection
+  
+
+.\packages\core\src\config.ts:144:54
+ lint/complexity/useLiteralKeys  
+FIXABLE  ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+Γöü
+
+  ├ù The computed expression can be 
+simplified without the use of a 
+string literal.
+  
+    142 Γöé   if 
+(env['GAO_APP_NAME']) 
+appConfig['name'] = 
+env['GAO_APP_NAME'];
+    143 Γöé   if 
+(env['GAO_APP_PORT']) 
+appConfig['port'] = Number.parseInt(
+env['GAO_APP_PORT'], 10);
+  > 144 Γöé   if 
+(env['GAO_APP_DEBUG']) 
+appConfig['debug'] = 
+env['GAO_APP_DEBUG'] === 'true';
+        Γöé                         
+                             
+^^^^^^^^^^^^^^^
+    145 Γöé 
+    146 Γöé   // Always override 
+environment from detection
+  
+  i Unsafe fix: Use a literal key 
+instead.
+  
+    142 142 Γöé     if 
+(env['GAO_APP_NAME']) 
+appConfig['name'] = 
+env['GAO_APP_NAME'];
+    143 143 Γöé     if 
+(env['GAO_APP_PORT']) 
+appConfig['port'] = Number.parseInt(
+env['GAO_APP_PORT'], 10);
+    144     Γöé - ┬╖┬╖if┬╖(env['GAO_
+APP_DEBUG'])┬╖appConfig['debug']┬╖=┬
+╖env['GAO_APP_DEBUG']┬╖===┬╖'true';
+        144 Γöé + ┬╖┬╖if┬╖(env['GAO_
+APP_DEBUG'])┬╖appConfig['debug']┬╖=┬
+╖env.GAO_APP_DEBUG┬╖===┬╖'true';
+    145 145 Γöé   
+    146 146 Γöé     // Always 
+override environment from detection
+  
+
+.\packages\core\src\config.ts:147:13
+ lint/complexity/useLiteralKeys  
+FIXABLE  ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+Γöü
+
+  ├ù The computed expression can be 
+simplified without the use of a 
+string literal.
+  
+    146 Γöé   // Always override 
+environment from detection
+  > 147 Γöé   
+appConfig['environment'] = 
+environment;
+        Γöé             
+^^^^^^^^^^^^^
+    148 Γöé }
+    149 Γöé 
+  
+  i Unsafe fix: Use a literal key 
+instead.
+  
+    145 145 Γöé   
+    146 146 Γöé     // Always 
+override environment from detection
+    147     Γöé - ┬╖┬╖appConfig['env
+ironment']┬╖=┬╖environment;
+        147 Γöé + ┬╖┬╖appConfig.envi
+ronment┬╖=┬╖environment;
+    148 148 Γöé   }
+    149 149 Γöé   
+  
+
+The number of diagnostics exceeds the number allowed by Biome.
+Diagnostics not shown: 1.
+Checked 30 files in 87ms. No fixes applied.
+Found 20 errors.
+Found 1 warning.
+check ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+
+  ├ù Some errors were emitted while 
+running checks.
+  
+

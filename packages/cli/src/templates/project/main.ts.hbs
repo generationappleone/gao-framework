@@ -1,0 +1,16 @@
+import { GaoApplication } from '@gao/core';
+import { HttpServer } from '@gao/http';
+
+async function bootstrap() {
+const app = new GaoApplication();
+
+// Register modules
+app.register(HttpServer);
+
+await app.boot();
+
+const server = app.resolve(HttpServer);
+server.listen();
+}
+
+bootstrap().catch(console.error);

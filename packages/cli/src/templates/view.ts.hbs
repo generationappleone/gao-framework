@@ -1,0 +1,20 @@
+import { Component, Prop } from '@gao/view';
+
+export interface {{name}}Props {
+title: string;
+}
+
+@Component('{{componentPath}}')
+export class {{name}} {
+@Prop()
+declare title: string;
+
+render() {
+return `
+<div class="{{name}}-component">
+    <h1>{{title}}</h1>
+    <p>This is the {{name}} component.</p>
+</div>
+`;
+}
+}

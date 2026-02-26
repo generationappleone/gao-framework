@@ -1,0 +1,138 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.4 [39m[90mX:/Project/gao-framework/framework/packages/security[39m
+
+ [32m✓[39m tests/cors.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m tests/helmet.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [31m❯[39m tests/aes256.test.ts [2m([22m[2m6 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 21[2mms[22m[39m
+   [32m✓[39m AES-256-GCM Encryption[2m > [22mshould encrypt and decrypt a string with string key (HKDF)[32m 5[2mms[22m[39m
+   [32m✓[39m AES-256-GCM Encryption[2m > [22mshould encrypt and decrypt a string with PBKDF2[32m 1[2mms[22m[39m
+   [32m✓[39m AES-256-GCM Encryption[2m > [22mshould encrypt and decrypt with an exact Buffer key[32m 1[2mms[22m[39m
+   [32m✓[39m AES-256-GCM Encryption[2m > [22mshould lock ciphertext to associatedData (AAD)[32m 2[2mms[22m[39m
+[31m   [31m×[31m AES-256-GCM Encryption[2m > [22mshould detect and reject tampered ciphertexts[39m[32m 10[2mms[22m[39m
+[31m     → expected [Function] to throw an error[39m
+   [32m✓[39m AES-256-GCM Encryption[2m > [22mshould throw on incorrect key lengths for Buffer[32m 1[2mms[22m[39m
+ [31m❯[39m tests/hashing.test.ts [2m([22m[2m5 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[32m 18[2mms[22m[39m
+[31m   [31m×[31m Hashing Service (Argon2)[2m > [22mshould hash a password successfully[39m[32m 10[2mms[22m[39m
+[31m     → Invalid timeCost, must be between 2 and 4294967295.[39m
+[31m   [31m×[31m Hashing Service (Argon2)[2m > [22mshould verify a valid password[39m[32m 1[2mms[22m[39m
+[31m     → Invalid timeCost, must be between 2 and 4294967295.[39m
+[31m   [31m×[31m Hashing Service (Argon2)[2m > [22mshould reject an invalid password[39m[32m 2[2mms[22m[39m
+[31m     → Invalid timeCost, must be between 2 and 4294967295.[39m
+   [32m✓[39m Hashing Service (Argon2)[2m > [22mshould reject a malformed hash safely[32m 2[2mms[22m[39m
+[31m   [31m×[31m Hashing Service (Argon2)[2m > [22mshould detect if a hash needs to be rehashed[39m[32m 2[2mms[22m[39m
+[31m     → Invalid timeCost, must be between 2 and 4294967295.[39m
+ [32m✓[39m tests/csrf.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m tests/validator.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m tests/rate-limiter.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 5 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m tests/aes256.test.ts[2m > [22mAES-256-GCM Encryption[2m > [22mshould detect and reject tampered ciphertexts
+[31m[1mAssertionError[22m: expected [Function] to throw an error[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m tests/aes256.test.ts:[2m65:12[22m[39m
+    [90m 63| [39m        [34mexpect[39m(() [33m=>[39m {
+    [90m 64| [39m            [34mdecrypt[39m(tampered[33m,[39m { key[33m:[39m passwordKey })[33m;[39m
+    [90m 65| [39m        })[33m.[39m[34mtoThrow[39m([32m'Decryption compromised'[39m)[33m;[39m
+    [90m   | [39m           [31m^[39m
+    [90m 66| [39m    })[33m;[39m
+    [90m 67| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/hashing.test.ts[2m > [22mHashing Service (Argon2)[2m > [22mshould hash a password successfully
+[31m[1mAssertionError[22m: Invalid timeCost, must be between 2 and 4294967295.[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[90m [2m❯[22m Proxy.hash ../../node_modules/.pnpm/argon2@0.41.1/node_modules/argon2/argon2.cjs:[2m85:5[22m[39m
+[36m [2m❯[22m hashPassword src/crypto/hashing.ts:[2m37:19[22m[39m
+    [90m 35| [39mexport async function hashPassword(password: string, options?: Hashing…
+    [90m 36| [39m    [35mconst[39m mergedOptions [33m=[39m { [33m...[39m[33mDEFAULT_OPTIONS[39m[33m,[39m [33m...[39moptions }[33m;[39m
+    [90m 37| [39m    [35mreturn[39m argon2[33m.[39m[34mhash[39m(password[33m,[39m mergedOptions)[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m 38| [39m}
+    [90m 39| [39m
+[90m [2m❯[22m tests/hashing.test.ts:[2m13:28[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/hashing.test.ts[2m > [22mHashing Service (Argon2)[2m > [22mshould verify a valid password
+[31m[1mAssertionError[22m: Invalid timeCost, must be between 2 and 4294967295.[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[90m [2m❯[22m Proxy.hash ../../node_modules/.pnpm/argon2@0.41.1/node_modules/argon2/argon2.cjs:[2m85:5[22m[39m
+[36m [2m❯[22m hashPassword src/crypto/hashing.ts:[2m37:19[22m[39m
+    [90m 35| [39mexport async function hashPassword(password: string, options?: Hashing…
+    [90m 36| [39m    [35mconst[39m mergedOptions [33m=[39m { [33m...[39m[33mDEFAULT_OPTIONS[39m[33m,[39m [33m...[39moptions }[33m;[39m
+    [90m 37| [39m    [35mreturn[39m argon2[33m.[39m[34mhash[39m(password[33m,[39m mergedOptions)[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m 38| [39m}
+    [90m 39| [39m
+[90m [2m❯[22m tests/hashing.test.ts:[2m21:28[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/hashing.test.ts[2m > [22mHashing Service (Argon2)[2m > [22mshould reject an invalid password
+[31m[1mAssertionError[22m: Invalid timeCost, must be between 2 and 4294967295.[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[90m [2m❯[22m Proxy.hash ../../node_modules/.pnpm/argon2@0.41.1/node_modules/argon2/argon2.cjs:[2m85:5[22m[39m
+[36m [2m❯[22m hashPassword src/crypto/hashing.ts:[2m37:19[22m[39m
+    [90m 35| [39mexport async function hashPassword(password: string, options?: Hashing…
+    [90m 36| [39m    [35mconst[39m mergedOptions [33m=[39m { [33m...[39m[33mDEFAULT_OPTIONS[39m[33m,[39m [33m...[39moptions }[33m;[39m
+    [90m 37| [39m    [35mreturn[39m argon2[33m.[39m[34mhash[39m(password[33m,[39m mergedOptions)[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m 38| [39m}
+    [90m 39| [39m
+[90m [2m❯[22m tests/hashing.test.ts:[2m28:28[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/hashing.test.ts[2m > [22mHashing Service (Argon2)[2m > [22mshould detect if a hash needs to be rehashed
+[31m[1mAssertionError[22m: Invalid timeCost, must be between 2 and 4294967295.[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[90m [2m❯[22m Proxy.hash ../../node_modules/.pnpm/argon2@0.41.1/node_modules/argon2/argon2.cjs:[2m85:5[22m[39m
+[36m [2m❯[22m hashPassword src/crypto/hashing.ts:[2m37:19[22m[39m
+    [90m 35| [39mexport async function hashPassword(password: string, options?: Hashing…
+    [90m 36| [39m    [35mconst[39m mergedOptions [33m=[39m { [33m...[39m[33mDEFAULT_OPTIONS[39m[33m,[39m [33m...[39moptions }[33m;[39m
+    [90m 37| [39m    [35mreturn[39m argon2[33m.[39m[34mhash[39m(password[33m,[39m mergedOptions)[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m 38| [39m}
+    [90m 39| [39m
+[90m [2m❯[22m tests/hashing.test.ts:[2m38:28[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[31m5 failed[39m[22m[2m | [22m[1m[32m25 passed[39m[22m[90m (30)[39m
+[2m   Start at [22m 21:08:35
+[2m   Duration [22m 2.78s[2m (transform 1.28s, setup 0ms, collect 3.27s, tests 103ms, environment 4ms, prepare 4.67s)[22m
+

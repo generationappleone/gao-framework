@@ -1,0 +1,21 @@
+{
+    "name": "gao-example-basic-api",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "gao dev",
+        "build": "gao build",
+        "start": "node dist/main.js"
+    },
+    "dependencies": {
+        "@gao/core": "workspace:*",
+        "@gao/http": "workspace:*",
+        "@gao/orm": "workspace:*",
+        "@gao/security": "workspace:*"
+    },
+    "devDependencies": {
+        "@gao/cli": "workspace:*",
+        "typescript": "^5.7.0"
+    }
+}
