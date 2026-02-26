@@ -1,7 +1,8 @@
 <div align="center">
 
 # 🚀 GAO Framework
-
+v0.2: WebSocket support, OpenAPI auto-generation, Redis adapter
+v0.3: GraphQL support, Real-time channels
 **The Next-Generation TypeScript Full-Stack Multi-Platform Framework**
 
 *Security-by-Default • High Performance • Rapid Development • Multi-Platform Build*
@@ -140,6 +141,9 @@ GAO Framework uses a monorepo managed by **Turborepo** and **pnpm**.
 | `@gao/view` | **View Engine.** `.gao` template engine with compiled functions, auto-escaping, layouts, sections, partials, component system, asset pipeline, built-in helpers. | ✅ |
 | `@gao/desktop` | **Desktop Wrapper.** Tauri v2 config generator, type-safe IPC bridge, build pipeline, auto-updater. | ✅ |
 | `@gao/mobile` | **Mobile Wrapper.** Capacitor config generator, native plugin bridge (Camera, Geolocation, Share), build pipeline, platform detection. | ✅ |
+| `@gao/queue` | **Background Jobs.** BullMQ-powered job queue with named queues, retries, exponential backoff, cron/repeatable scheduling, and worker management. | ✅ |
+| `@gao/email` | **Transactional Email.** Nodemailer transport with SMTP/Ethereal, HTML template engine with XSS escaping, built-in templates, and optional queue integration. | ✅ |
+| `@gao/websocket` | **Real-Time.** Socket.IO with JWT authentication middleware, channel/room management, presence tracking, and helper utilities (emitToUser, emitToChannel, broadcast). | ✅ |
 
 ---
 

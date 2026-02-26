@@ -1,0 +1,37 @@
+{
+    "name": "@gao/queue",
+    "version": "0.1.0",
+    "description": "GAO Framework — Background job queue with BullMQ, retries, scheduling, and dashboard",
+    "type": "module",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "tsc --project tsconfig.json",
+        "test": "vitest run",
+        "test:watch": "vitest watch",
+        "typecheck": "tsc --noEmit",
+        "clean": "rimraf dist"
+    },
+    "dependencies": {
+        "@gao/core": "workspace:*",
+        "bullmq": "^5.34.0"
+    },
+    "devDependencies": {
+        "@types/node": "^25.3.0",
+        "rimraf": "^6.0.0",
+        "typescript": "^5.7.0",
+        "vitest": "^3.0.0"
+    },
+    "peerDependencies": {
+        "typescript": ">=5.7.0"
+    }
+}
