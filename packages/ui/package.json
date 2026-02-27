@@ -1,0 +1,36 @@
+{
+    "name": "@gao/ui",
+    "version": "0.1.0",
+    "description": "GAO Framework — UI Kit: GaoType fonts, GaoIcons SVG library, GaoAdmin template (zero dependencies)",
+    "type": "module",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "tsc --project tsconfig.json",
+        "test": "vitest run",
+        "test:watch": "vitest watch",
+        "typecheck": "tsc --noEmit",
+        "clean": "rimraf dist"
+    },
+    "dependencies": {
+        "@gao/core": "workspace:*"
+    },
+    "devDependencies": {
+        "@types/node": "^25.3.0",
+        "rimraf": "^6.0.0",
+        "typescript": "^5.7.0",
+        "vitest": "^3.0.0"
+    },
+    "peerDependencies": {
+        "typescript": ">=5.7.0"
+    }
+}

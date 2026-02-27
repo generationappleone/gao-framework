@@ -3,6 +3,7 @@
  *
  * Auto-discovery of routes built from decorated classes.
  * Converts Reflect.metadata into usable router configurations.
+ * Supports optional DI Container for constructor injection.
  */
 
 import {
@@ -12,6 +13,8 @@ import {
   type RouteMetadata,
 } from './decorators.js';
 import type { MiddlewareHandler } from './middleware.js';
+import { getValidationSchema, validateData } from './validation.js';
+import type { Container } from '@gao/core';
 
 export interface RouteDefinition {
   method: string;
@@ -24,10 +27,19 @@ export interface RouteDefinition {
 
 export class ControllerRegistry {
   private routes: RouteDefinition[] = [];
+  private container?: Container;
+
+  /**
+   * Optionally set a DI Container for controller resolution.
+   */
+  public setContainer(container: Container): void {
+    this.container = container;
+  }
 
   /**
    * Parse a decorated Controller class and extract routes.
-   * Note: A real framework would integrate this with DI, but for now we manually instantiate or pass the class.
+   * If a Container is set, uses container.resolveClass() for DI injection.
+   * Otherwise falls back to manual instantiation (backward compatible).
    */
   public register(ControllerClass: new (...args: any[]) => any): void {
     const controllerMeta = Reflect.getMetadata(CONTROLLER_METADATA_KEY, ControllerClass) as
@@ -41,8 +53,10 @@ export class ControllerRegistry {
     const routesMeta =
       (Reflect.getMetadata(ROUTES_METADATA_KEY, ControllerClass) as RouteMetadata[]) || [];
 
-    // Instantiate controller (Integration with @gao/core Container would happen here)
-    const instance = new ControllerClass();
+    // Instantiate via DI Container or manually
+    const instance = this.container
+      ? this.container.resolveClass(ControllerClass)
+      : new ControllerClass();
 
     for (const route of routesMeta) {
       // Normalize path: handle double slashes
@@ -53,6 +67,17 @@ export class ControllerRegistry {
 
       // Combine controller middlewares with route-specific middlewares
       const combinedMiddlewares = [...controllerMeta.middlewares, ...route.middlewares];
+
+      // Auto-inject validation middleware if @Validate() is present
+      const validationSchema = getValidationSchema(instance, route.handlerName);
+      if (validationSchema) {
+        const validationMw: MiddlewareHandler = async (req, _res, next) => {
+          const validated = validateData(validationSchema, req.body);
+          req.setValidated(validated);
+          return next();
+        };
+        combinedMiddlewares.push(validationMw);
+      }
 
       this.routes.push({
         method: route.method,

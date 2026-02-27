@@ -10,6 +10,8 @@ export interface EngineOptions {
     cache?: boolean;
     components?: ComponentRegistry;
     helpers?: ViewHelpers;
+    /** Optional UI helpers injected by @gao/ui plugin */
+    uiHelpers?: Record<string, Function>;
 }
 
 export type RenderData = Record<string, any>;

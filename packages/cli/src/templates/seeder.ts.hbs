@@ -1,0 +1,18 @@
+import type { Seeder } from '@gao/orm';
+import type { DatabaseDriver } from '@gao/orm';
+
+const {{name}}Seeder: Seeder = {
+  name: '{{name}}Seeder',
+  dependencies: [],
+
+  async run(driver: DatabaseDriver): Promise<void> {
+    // Add your seeding logic here
+    // Example:
+    // await driver.execute(
+    //   'INSERT INTO {{tableName}} (id, name, created_at) VALUES ($1, $2, NOW())',
+    //   [crypto.randomUUID(), 'Seed Data']
+    // );
+  },
+};
+
+export default {{name}}Seeder;

@@ -15,7 +15,7 @@ export const generateCommand = new Command('generate')
     .argument('<type>', 'Type of file to generate (controller, service, model, middleware, migration)')
     .argument('<name>', 'Name of the generated class or file')
     .action(async (type, name) => {
-        const validTypes = ['controller', 'service', 'model', 'middleware', 'migration'];
+        const validTypes = ['controller', 'service', 'model', 'middleware', 'migration', 'seeder'];
 
         if (!validTypes.includes(type)) {
             console.error(chalk.red(`❌ Invalid type: ${type}. Must be one of: ${validTypes.join(', ')}`));
@@ -29,6 +29,7 @@ export const generateCommand = new Command('generate')
 
         let destDir = path.join(process.cwd(), 'src', `${type}s`);
         if (type === 'migration') destDir = path.join(process.cwd(), 'src', 'database', 'migrations');
+        if (type === 'seeder') destDir = path.join(process.cwd(), 'src', 'database', 'seeders');
 
         const sourcePath = path.resolve(__dirname, `../../src/templates/${type}.ts.hbs`);
 

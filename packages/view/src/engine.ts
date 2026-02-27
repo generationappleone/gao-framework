@@ -17,10 +17,21 @@ export class GaoViewEngine {
     private currentLayout: string | null = null;
     private components: ComponentRegistry;
     private helpers: ViewHelpers;
+    private uiHelpers: Record<string, Function> = {};
 
     constructor(private options: EngineOptions) {
         this.components = options.components || new ComponentRegistry();
         this.helpers = options.helpers || new ViewHelpers();
+        if (options.uiHelpers) {
+            this.uiHelpers = { ...options.uiHelpers };
+        }
+    }
+
+    /**
+     * Add UI helpers at runtime (called by plugins like @gao/ui).
+     */
+    public addHelpers(helpers: Record<string, Function>): void {
+        Object.assign(this.uiHelpers, helpers);
     }
 
     /**
@@ -51,13 +62,136 @@ export class GaoViewEngine {
     /**
      * Compile a template string into a render function.
      */
+    /**
+     * Preprocess control flow directives before tokenization.
+     * Converts @if/@foreach/etc. into <@ code @> blocks.
+     */
+    private preprocessDirectives(template: string): string {
+        let result = template;
+
+        // Helper: extract balanced parenthesized content after @directive
+        // e.g. @if(foo === "bar") → captures 'foo === "bar"'
+        const replaceDirective = (
+            input: string,
+            directive: string,
+            replacement: (content: string) => string,
+        ): string => {
+            let output = '';
+            let i = 0;
+            const tag = `@${directive}`;
+            while (i < input.length) {
+                const idx = input.indexOf(tag, i);
+                if (idx === -1) {
+                    output += input.slice(i);
+                    break;
+                }
+                output += input.slice(i, idx);
+                let j = idx + tag.length;
+                // Skip optional whitespace
+                while (j < input.length && (input[j] === ' ' || input[j] === '\t')) j++;
+                if (input[j] === '(') {
+                    // Find balanced close paren
+                    let depth = 1;
+                    let start = j + 1;
+                    j++;
+                    while (j < input.length && depth > 0) {
+                        if (input[j] === '(') depth++;
+                        else if (input[j] === ')') depth--;
+                        j++;
+                    }
+                    const content = input.slice(start, j - 1);
+                    output += replacement(content);
+                    i = j;
+                } else {
+                    output += tag;
+                    i = idx + tag.length;
+                }
+            }
+            return output;
+        };
+
+        // @if(condition) → <@ if (condition) { @>
+        result = replaceDirective(result, 'if', (c) => `<@ if (${c}) { @>`);
+        // @elseif(condition) → <@ } else if (condition) { @>
+        result = replaceDirective(result, 'elseif', (c) => `<@ } else if (${c}) { @>`);
+        // @else → <@ } else { @>
+        result = result.replace(/@else(?!if)\b\s*/g, '<@ } else { @>');
+        // @endif → <@ } @>
+        result = result.replace(/@endif\b\s*/g, '<@ } @>');
+
+        // @unless(condition) → <@ if (!(condition)) { @>
+        result = replaceDirective(result, 'unless', (c) => `<@ if (!(${c})) { @>`);
+        // @endunless → <@ } @>
+        result = result.replace(/@endunless\b\s*/g, '<@ } @>');
+
+        // @foreach(items as item, index) or @foreach(items as item)
+        result = replaceDirective(result, 'foreach', (c) => {
+            const matchWithIndex = c.match(/^(.+?)\s+as\s+(\w+)\s*,\s*(\w+)$/);
+            if (matchWithIndex) {
+                return `<@ for (const [${matchWithIndex[3]}, ${matchWithIndex[2]}] of (${matchWithIndex[1]}).entries()) { @>`;
+            }
+            const matchSimple = c.match(/^(.+?)\s+as\s+(\w+)$/);
+            if (matchSimple) {
+                return `<@ for (const ${matchSimple[2]} of (${matchSimple[1]})) { @>`;
+            }
+            return `<@ /* invalid foreach: ${c} */ @>`;
+        });
+        // @endforeach → <@ } @>
+        result = result.replace(/@endforeach\b\s*/g, '<@ } @>');
+
+        // @empty(array)
+        result = replaceDirective(result, 'empty', (c) =>
+            `<@ if (Array.isArray(${c}) && (${c}).length === 0) { @>`);
+        result = result.replace(/@endempty\b\s*/g, '<@ } @>');
+
+        // @switch(expr)
+        result = replaceDirective(result, 'switch', (c) => `<@ switch (${c}) { @>`);
+        // @case(val)
+        result = replaceDirective(result, 'case', (c) => `<@ case ${c}: @>`);
+        // @default → <@ default: @>
+        result = result.replace(/@default\b\s*/g, '<@ default: @>');
+        // @break → <@ break; @>
+        result = result.replace(/@break\b\s*/g, '<@ break; @>');
+        // @endswitch → <@ } @>
+        result = result.replace(/@endswitch\b\s*/g, '<@ } @>');
+
+        // @json(data)
+        result = replaceDirective(result, 'json', (c) =>
+            `<@ __target(__escape(JSON.stringify(${c}))); @>`);
+
+        // @class({ 'active': condition, 'disabled': otherCondition })
+        result = replaceDirective(result, 'class', (c) =>
+            `<@ __target(Object.entries(${c}).filter(([,v]) => v).map(([k]) => k).join(' ')); @>`);
+
+        // ─── @gao/ui directives (active when gaoUIPlugin is registered) ───
+
+        // @fonts(['GaoSans', 'GaoMono']) → injects font CSS
+        result = replaceDirective(result, 'fonts', (c) =>
+            `<@ if (typeof injectFonts === 'function') __target(injectFonts(${c})); @>`);
+
+        // @icon('home', { size: 20 }) → renders SVG icon
+        result = replaceDirective(result, 'icon', (c) =>
+            `<@ if (typeof gaoIcon === 'function') __target(gaoIcon(${c})); @>`);
+
+        // @adminLayout({ sidebar: [...] }) → full admin page layout
+        result = replaceDirective(result, 'adminLayout', (c) =>
+            `<@ if (typeof adminLayout === 'function') __target(adminLayout(${c})); @>`);
+
+        return result;
+    }
+
     public compile(template: string, filename?: string): (data: RenderData, helpers: any) => string {
+        // Phase 1: Preprocess control flow directives
+        const preprocessed = this.preprocessDirectives(template);
+
         let code = 'let __out = "";\n';
         // Destructure core helpers and standard helpers
-        code += 'const { __escape, layout, section, endsection, partial, yieldSection, component, endcomponent, url, asset, csrf, can, old, paginate } = __helpers;\n';
+        code += 'const { __escape, layout, section, endsection, partial, yieldSection, component, endcomponent, url, asset, csrf, can, old, paginate, ...uiH } = __helpers;\n';
+        // Spread UI helpers into scope (gaoIcon, injectFonts, statCard, etc.)
+        code += 'const { injectFonts, gaoIcon, adminLayout, adminCSS, adminScripts, statCard, dataTable, barChart, lineChart, donutChart, toast, modal, badge, progress, avatar, fontCSS, gaoIconSprite, gaoIconAnimationCSS, emptyState, alertBanner, breadcrumb, form, adminSidebar, adminNavbar } = uiH;\n';
         code += 'let __target = (text) => { __out += text; };\n';
 
-        const tokens = template.split(/(<@[\s\S]*?@>|\$\{[\s\S]*?\}|\!\{[\s\S]*?\})/);
+        const tokens = preprocessed.split(/(<@[\s\S]*?@>|\$\{[\s\S]*?\}|\!\{[\s\S]*?\})/);
 
         for (const token of tokens) {
             if (!token) continue;
@@ -193,7 +327,10 @@ export class GaoViewEngine {
             csrf: () => this.helpers.csrf(),
             can: (p: string) => this.helpers.can(p),
             old: (key: string, def?: any) => this.helpers.old(key, data, def),
-            paginate: (meta: any) => this.helpers.paginate(meta)
+            paginate: (meta: any) => this.helpers.paginate(meta),
+
+            // Spread UI helpers from @gao/ui plugin (if registered)
+            ...this.uiHelpers,
         };
     }
 

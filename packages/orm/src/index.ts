@@ -14,3 +14,4 @@ export * from './relations.js';
 export * from './pagination.js';
 export * from './hooks.js';
 export * from './seeder.js';
+export * from './active-record.js';

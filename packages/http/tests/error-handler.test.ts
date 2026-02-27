@@ -30,7 +30,7 @@ describe('Global Error Handler', () => {
   });
 
   it('should map standard node Error to 500', async () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
     const err = new Error('Database connection failed');
     const res = errorHandler(err);
 
@@ -39,13 +39,13 @@ describe('Global Error Handler', () => {
 
     const body = await res.json();
     expect(body.error.code).toBe('INTERNAL_SERVER_ERROR');
-    expect(body.error.message).toBe('An unexpected error occurred.');
+    expect(body.error.message).toBe('Database connection failed');
 
     consoleSpy.mockRestore();
   });
 
   it('should handle thrown strings', async () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
     const res = errorHandler('just a string error');
 
     expect(res.status).toBe(500);

@@ -7,6 +7,8 @@
  */
 
 import { randomUUID } from 'node:crypto';
+import type { Session } from './session.js';
+import type { FlashMessages } from './flash.js';
 
 export class GaoRequest<
   B = any,
@@ -27,6 +29,15 @@ export class GaoRequest<
 
   // User Context (to be populated by auth middlewares)
   public user?: any;
+
+  // Session (populated by sessionMiddleware)
+  public session?: Session;
+
+  // Flash messages (populated by flashMiddleware)
+  public flash?: FlashMessages;
+
+  // Validated request body (populated by validation middleware)
+  private _validated?: unknown;
 
   constructor(req: Request, clientIp = '127.0.0.1') {
     this.native = req;
@@ -88,5 +99,22 @@ export class GaoRequest<
    */
   public header(name: string): string | null {
     return this.native.headers.get(name);
+  }
+
+  /**
+   * Get the validated request body (set by @Validate decorator middleware).
+   */
+  public validated<T>(): T {
+    if (this._validated === undefined) {
+      throw new Error('No validated data available. Did you apply @Validate() decorator?');
+    }
+    return this._validated as T;
+  }
+
+  /**
+   * Set validated data (called by validation middleware — not for direct use).
+   */
+  public setValidated(data: unknown): void {
+    this._validated = data;
   }
 }

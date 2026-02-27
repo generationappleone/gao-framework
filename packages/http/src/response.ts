@@ -121,6 +121,16 @@ export class GaoResponse {
   }
 
   /**
+   * Reset the response to its initial state for object pool reuse.
+   * Clears status, headers, and body.
+   */
+  public reset(): void {
+    this._status = 200;
+    this._headers = new Headers();
+    this._body = null;
+  }
+
+  /**
    * Constructs the final native Web Request Response object.
    * Normally called internally by terminators like .json(), .html() etc.
    */
