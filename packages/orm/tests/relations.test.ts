@@ -1,20 +1,21 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { Table } from '../src/decorators.js';
 import type { DatabaseDriver } from '../src/drivers/driver.interface.js';
 import { BaseModel } from '../src/model.js';
 import { BelongsTo, HasMany, HasOne, ManyToMany } from '../src/relations.js';
+import { setModelDriver } from '../src/active-record.js';
 
 @Table('users')
-class User extends BaseModel {}
+class User extends BaseModel { }
 
 @Table('profiles')
-class Profile extends BaseModel {}
+class Profile extends BaseModel { }
 
 @Table('posts')
-class Post extends BaseModel {}
+class Post extends BaseModel { }
 
 @Table('roles')
-class Role extends BaseModel {}
+class Role extends BaseModel { }
 
 describe('Model Relations', () => {
   const mockDriver = {
@@ -24,6 +25,10 @@ describe('Model Relations', () => {
     disconnect: vi.fn(),
     transaction: vi.fn(),
   } as unknown as DatabaseDriver;
+
+  beforeEach(() => {
+    setModelDriver(mockDriver, 'postgres');
+  });
 
   it('should generate correct HasOne query', () => {
     const relation = new HasOne(Profile, 'id', 'user_id');

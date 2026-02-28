@@ -1,23 +1,41 @@
 /**
- * @gao/orm — Model Relations
+ * @gao/orm — Model Relations (Backward Compatibility)
  *
- * Provides relation types: HasOne, HasMany, BelongsTo, ManyToMany.
+ * This file re-exports relation classes from the new `relations/` directory.
+ * Existing imports from './relations.js' remain valid.
+ *
+ * NOTE: The new relation classes use a different constructor signature
+ * (parent instance as first arg). This compatibility layer provides
+ * wrapper classes that match the old constructor signatures for
+ * backward compatibility with existing code.
  */
 
 import { getMetadata } from './decorators.js';
 import type { DatabaseDriver } from './drivers/driver.interface.js';
 import type { BaseModel } from './model.js';
 import { QueryBuilder } from './query-builder.js';
+import { getModelDialect } from './active-record.js';
 
+type Dialect = 'postgres' | 'sqlite' | 'mysql' | 'mariadb';
+
+/**
+ * Legacy Relation base class.
+ * Kept for backward compatibility with existing code that uses:
+ *   new HasOne(ForeignModel, localKey, foreignKey)
+ */
 export abstract class Relation<TModel extends BaseModel = any> {
   constructor(
     protected foreignModel: new (...args: any[]) => TModel,
     public localKey: string,
     public foreignKey: string,
-  ) {}
+  ) { }
 
   protected getTableName(model: new (...args: any[]) => any): string {
     return getMetadata(model).tableName || model.name.toLowerCase() + 's';
+  }
+
+  protected resolveDialect(): Dialect {
+    return getModelDialect();
   }
 
   abstract query(driver: DatabaseDriver, localValue: any): QueryBuilder<TModel>;
@@ -26,7 +44,7 @@ export abstract class Relation<TModel extends BaseModel = any> {
 export class HasOne<TModel extends BaseModel> extends Relation<TModel> {
   query(driver: DatabaseDriver, localValue: any): QueryBuilder<TModel> {
     const tableName = this.getTableName(this.foreignModel);
-    return new QueryBuilder<TModel>(driver, 'postgres', tableName)
+    return new QueryBuilder<TModel>(driver, this.resolveDialect(), tableName)
       .where(this.foreignKey, '=', localValue)
       .limit(1);
   }
@@ -35,7 +53,7 @@ export class HasOne<TModel extends BaseModel> extends Relation<TModel> {
 export class HasMany<TModel extends BaseModel> extends Relation<TModel> {
   query(driver: DatabaseDriver, localValue: any): QueryBuilder<TModel> {
     const tableName = this.getTableName(this.foreignModel);
-    return new QueryBuilder<TModel>(driver, 'postgres', tableName).where(
+    return new QueryBuilder<TModel>(driver, this.resolveDialect(), tableName).where(
       this.foreignKey,
       '=',
       localValue,
@@ -46,8 +64,8 @@ export class HasMany<TModel extends BaseModel> extends Relation<TModel> {
 export class BelongsTo<TModel extends BaseModel> extends Relation<TModel> {
   query(driver: DatabaseDriver, localValue: any): QueryBuilder<TModel> {
     const tableName = this.getTableName(this.foreignModel);
-    return new QueryBuilder<TModel>(driver, 'postgres', tableName)
-      .where(this.localKey, '=', localValue) // Here localKey points to the PK of foreign model
+    return new QueryBuilder<TModel>(driver, this.resolveDialect(), tableName)
+      .where(this.localKey, '=', localValue)
       .limit(1);
   }
 }
@@ -66,8 +84,7 @@ export class ManyToMany<TModel extends BaseModel> extends Relation<TModel> {
 
   query(driver: DatabaseDriver, localValue: any): QueryBuilder<TModel> {
     const foreignTable = this.getTableName(this.foreignModel);
-    // SELECT * FROM foreignTable INNER JOIN pivotTable ON foreignTable.foreignKey = pivotTable.pivotForeignKey WHERE pivotTable.pivotLocalKey = ?
-    return new QueryBuilder<TModel>(driver, 'postgres', foreignTable)
+    return new QueryBuilder<TModel>(driver, this.resolveDialect(), foreignTable)
       .join(
         this.pivotTable,
         `${foreignTable}.${this.foreignKey}`,
