@@ -4,14 +4,14 @@
 
 **The Next-Generation TypeScript Full-Stack Multi-Platform Framework**
 
-*v0.5.0 — Security-by-Default • High Performance • Zero External Dependencies UI Kit*
+*v0.6.0 — Security-by-Default • High Performance • E2EE Transport • Zero External Dependencies UI Kit*
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7+-blue?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Bun](https://img.shields.io/badge/Bun-1.2+-black?logo=bun&logoColor=white)](https://bun.sh/)
 [![Security](https://img.shields.io/badge/Security-Strict-red?logo=shield&logoColor=white)](#-1-security-by-default)
-[![Monorepo](https://img.shields.io/badge/Monorepo-Turborepo-orange?logo=vercel&logoColor=white)](#-monorepo-packages--14-packages)
+[![Monorepo](https://img.shields.io/badge/Monorepo-Turborepo-orange?logo=vercel&logoColor=white)](#-monorepo-packages--17-packages)
 [![Platform](https://img.shields.io/badge/Platform-Web%20%7C%20Desktop%20%7C%20Mobile-green?logo=electron&logoColor=white)](#-4-multi-platform-build)
-[![Tests](https://img.shields.io/badge/Tests-456%2B%20passing-brightgreen?logo=vitest&logoColor=white)](#-testing)
+[![Tests](https://img.shields.io/badge/Tests-556%2B%20passing-brightgreen?logo=vitest&logoColor=white)](#-testing)
 
 </div>
 
@@ -43,7 +43,7 @@ GAO runs on **[Bun](https://bun.sh/)** (with Node.js 22+ LTS fallback) and follo
 | **Language** | TypeScript 5.7+ (Strict Mode, `noImplicitAny`) |
 | **Validation** | Zod |
 | **Logging** | Pino (structured JSON, auto-redaction) |
-| **Testing** | Vitest (456+ tests passing) |
+| **Testing** | Vitest (556+ tests passing) |
 | **Linter/Formatter** | Biome |
 | **Security** | Native `crypto` (AES-256-GCM), Argon2, Jose (JWT) |
 | **Queue** | BullMQ (Redis-backed) |
@@ -55,7 +55,7 @@ GAO runs on **[Bun](https://bun.sh/)** (with Node.js 22+ LTS fallback) and follo
 
 ---
 
-## 📦 Monorepo Packages — 14 Packages
+## 📦 Monorepo Packages — 17 Packages
 
 GAO Framework uses a monorepo managed by **Turborepo** and **pnpm**.
 
@@ -75,6 +75,9 @@ GAO Framework uses a monorepo managed by **Turborepo** and **pnpm**.
 | `@gao/monitor` | **Monitoring.** `MetricsCollector` (counter/gauge/histogram), `toPrometheus()` export, `SystemMonitor` (CPU/memory/event loop lag), `RingBuffer` for bounded metric storage. | — |
 | `@gao/desktop` | **Desktop Wrapper.** Tauri v2 config generator, type-safe IPC bridge, build pipeline, auto-updater. | — |
 | `@gao/mobile` | **Mobile Wrapper.** Capacitor config generator, native plugin bridge (Camera, Geolocation, Share), build pipeline, platform detection. | — |
+| `@gao/crypto-transport` | **E2EE Transport Layer.** Transparent end-to-end encryption: X25519 ECDH handshake, AES-256-GCM envelope encryption, HKDF-SHA256 key derivation, forward-secrecy key ratchet, replay protection (monotonic seq), auto-decrypt/auto-encrypt middleware, browser client SDK (Web Crypto API), Redis session store with atomic INCR. | — |
+| `@gao/antivirus` | **Upload Virus Scanner.** Mandatory file upload scanning: ClamAV daemon integration (TCP/Unix socket), NoopScanner (dev), MultiScanner (parallel), QuarantineManager (file isolation + JSON audit log), `scanFile()` with fallback modes (strict/warn/allow), oversized file rejection, SHA-256 audit trail. | clamscan (optional) |
+| `@gao/mesh` | **Encrypted Mesh Network.** Overlay mesh for inter-service communication: ChaCha20-Poly1305 AEAD transport, binary wire format, PeerManager (heartbeat, dead peer detection, key lifecycle), topic-based message routing with wildcards, pluggable DiscoveryProvider (static built-in), key wiping on disconnect. | — |
 
 ---
 
@@ -83,12 +86,19 @@ GAO Framework uses a monorepo managed by **Turborepo** and **pnpm**.
 ### Request Lifecycle Pipeline
 
 ```text
-Client Request
+Client Request (encrypted if E2EE active)
       │
       ▼
 ┌─────────────────────────────────────────────────┐
 │  Bun Server (Node.js fallback)                  │
 └────────────────────┬────────────────────────────┘
+                     │
+                     ▼
+  ┌──────────────────────────────────────────────┐
+  │  E2EE Pipeline (@gao/crypto-transport)        │
+  │  Handshake → Auto-Decrypt → [process]        │
+  │  → Auto-Encrypt (if session active)          │
+  └──────────────────┬───────────────────────────┘
                      │
                      ▼
   ┌──────────────────────────────────────────────┐
@@ -100,6 +110,7 @@ Client Request
                      ▼
   ┌──────────────────────────────────────────────┐
   │  Body Parser → Session → Flash              │
+  │  File Uploads → Antivirus Scan (@gao/antivirus)
   └──────────────────┬───────────────────────────┘
                      │
                      ▼
@@ -746,7 +757,7 @@ expectResponse(response)
 
 **Run commands:**
 ```bash
-pnpm test          # Run all tests (456+ tests across 69 test files)
+pnpm test          # Run all tests (556+ tests across 75+ test files)
 pnpm build         # Build all 14 packages
 pnpm lint          # Lint entire codebase
 ```
@@ -765,6 +776,9 @@ pnpm lint          # Lint entire codebase
 | `@gao/queue` | 20 |
 | `@gao/email` | 18 |
 | `@gao/websocket` | 22 |
+| `@gao/crypto-transport` | 61 |
+| `@gao/antivirus` | 16 |
+| `@gao/mesh` | 23 |
 
 ---
 
@@ -787,6 +801,9 @@ GAO Framework systematically prevents common vulnerabilities introduced by AI co
 | Uses .env for secrets | Framework has **no** .env loader. Config lives exclusively in `gao.config.ts`. |
 | Forgets DDoS protection | DDoS Shield middleware active by default with sane limits. |
 | Installs malicious package | `@gao/ui` needs **zero** external deps. Other packages have minimal, vetted deps. |
+| Sends data in plaintext | `@gao/crypto-transport` provides transparent E2EE — X25519 ECDH + AES-256-GCM encryption. Client and server code sees plaintext; wire is always encrypted. |
+| Skips virus scanning on uploads | `@gao/antivirus` enforces mandatory scanning in `strict` mode. Oversized files are **rejected**, not silently passed. |
+| Uses plaintext inter-service calls | `@gao/mesh` encrypts all inter-node traffic with ChaCha20-Poly1305 AEAD. Session keys wiped on disconnect. |
 
 ---
 
@@ -861,7 +878,11 @@ gao-framework/
 │   ├── ui/             # @gao/ui          — 10 Fonts, 200 Icons, Admin Template, Plugin
 │   ├── monitor/        # @gao/monitor     — Metrics, Prometheus, SystemMonitor
 │   ├── desktop/        # @gao/desktop     — Tauri v2 integration
-│   └── mobile/         # @gao/mobile      — Capacitor integration
+│   ├── mobile/         # @gao/mobile      — Capacitor integration
+│   ├── crypto-transport/ # @gao/crypto-transport — E2EE: X25519, AES-256-GCM,
+│   │                   #                    HKDF Ratchet, Replay Protection
+│   ├── antivirus/      # @gao/antivirus   — ClamAV, MultiScanner, Quarantine
+│   └── mesh/           # @gao/mesh        — ChaCha20-Poly1305, Peer Mgmt, Topics
 ├── turbo.json          # Turborepo pipeline config
 ├── package.json        # Root workspace (scripts: build, test, lint, clean)
 ├── tsconfig.base.json  # Shared TypeScript strict config
@@ -926,6 +947,40 @@ gao-framework/
 | `JwtService` | Class | JWT token management |
 | `RbacEngine` | Class | Role-based access control |
 
+### `@gao/crypto-transport`
+
+| Export | Type | Description |
+|--------|------|-------------|
+| `createE2EEPipeline(config)` | Function | Factory for complete E2EE pipeline (handshake + decrypt + encrypt) |
+| `generateKeyPair()` | Function | Generate X25519 ECDH key pair |
+| `deriveSharedKeys()` | Function | ECDH shared secret → HKDF → encryption + MAC keys |
+| `encryptEnvelope()` / `decryptEnvelope()` | Function | AES-256-GCM envelope encrypt/decrypt with AAD |
+| `MemorySessionStore` | Class | In-memory E2EE session store (dev) |
+| `RedisSessionStore` | Class | Redis-backed session store with atomic INCR (prod) |
+| `ratchetKey()` / `rotateSessionKey()` | Function | Forward-secrecy HKDF chain key rotation |
+| `createAutoDecrypt()` / `createAutoEncrypt()` | Function | Transparent request/response middleware |
+| `GaoE2EE` | Class | Browser client SDK (Web Crypto API) |
+
+### `@gao/antivirus`
+
+| Export | Type | Description |
+|--------|------|-------------|
+| `scanFile(file, config)` | Function | Core scan function (framework-agnostic) |
+| `NoopScanner` | Class | Dev-only scanner (always clean) |
+| `ClamAVScanner` | Class | ClamAV daemon integration (TCP/Unix) |
+| `MultiScanner` | Class | Run multiple scanners in parallel |
+| `QuarantineManager` | Class | Isolate infected files + JSON audit log |
+
+### `@gao/mesh`
+
+| Export | Type | Description |
+|--------|------|-------------|
+| `MeshNode` | Class | Core mesh node (topic routing + encrypted send) |
+| `PeerManager` | Class | Peer lifecycle, heartbeat, dead peer detection |
+| `StaticDiscovery` | Class | In-memory peer registry |
+| `encryptMessage()` / `decryptMessage()` | Function | ChaCha20-Poly1305 AEAD encrypt/decrypt |
+| `serializeWireMessage()` / `deserializeWireMessage()` | Function | Binary wire format conversion |
+
 ---
 
 ## 🌍 Multi-Platform Build
@@ -957,6 +1012,7 @@ if (Platform.is('mobile'))  { /* Capacitor-specific logic */ }
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| **0.6.0** | 2026-02-28 | `@gao/crypto-transport` (E2EE), `@gao/antivirus` (upload scanning), `@gao/mesh` (encrypted mesh) — 3 mandatory security layers, 100 new tests |
 | **0.5.0** | 2026-02-27 | `@gao/ui` — 10 fonts, 200 icons, admin template, `gaoUIPlugin()` |
 | **0.4.0** | 2026-02-27 | `@gao/monitor`, ObjectPool, LRU, Budget System, Permissions, Plugin Marketplace |
 | **0.3.0** | 2026-02-27 | Middleware factories, `createHttpHandler()`, Redis adapters, CLI commands |
