@@ -1,9 +1,53 @@
 /**
  * @gao/ui — Barrel Export
  *
- * Public API surface for @gao/ui v0.5.0
+ * Public API surface for @gao/ui v0.6.0
  * Zero external dependencies — all assets embedded inline.
  */
+
+// ─── Design System ───────────────────────────────────────────
+export {
+    gaoStyles,
+    injectStyles,
+    designTokensCSS,
+    colorTokensCSS,
+    spacingTokensCSS,
+    radiusTokensCSS,
+    shadowTokensCSS,
+    zIndexTokensCSS,
+    transitionTokensCSS,
+    typographyTokensCSS,
+    resetCSS,
+    typographyCSS,
+    utilitiesCSS,
+    responsiveCSS,
+    type GaoStylesOptions,
+} from './styles/index.js';
+
+// ─── Theme Engine ────────────────────────────────────────────
+export { generateThemeCSS, injectTheme } from './theme/theme-engine.js';
+export { GAO_THEMES, getPresetTheme, getPresetNames } from './theme/theme-presets.js';
+export { themeScript, injectThemeScript } from './theme/theme-script.js';
+export type { GaoHSLColor, GaoThemeColors, GaoThemeConfig, GaoThemePresetName } from './theme/theme-types.js';
+
+// ─── General UI Components ───────────────────────────────────
+export {
+    componentCSS,
+    gaoGrid, gaoContainer, gaoStack,
+    gaoButton, gaoButtonGroup, gaoDropdownMenu,
+    gaoInput, gaoSelect, gaoCheckbox, gaoSwitchToggle, gaoFormGroup,
+    gaoAlert, gaoTooltip, gaoSpinner,
+    gaoCard, gaoAccordion, gaoListGroup, gaoSkeleton,
+    gaoNavbar, gaoTabs, gaoPagination,
+    gaoCarousel, gaoOffcanvas,
+} from './components/index.js';
+
+// ─── Animation Library ───────────────────────────────────────
+export {
+    getAnimation, getAllAnimationNames, animationCount,
+    gaoAnimate, gaoAnimateCSS, injectAnimations, injectScrollReveal,
+} from './animations/animation-registry.js';
+export type { GaoAnimationName, GaoAnimationConfig } from './animations/animation-types.js';
 
 // ─── Fonts ───────────────────────────────────────────────────
 export {

@@ -2,8 +2,15 @@
  * @gao/websocket — WebSocketServer
  *
  * Core server that wraps Socket.IO with GAO conventions.
+ * Integrates 5 security layers automatically:
+ *   1. Ticket-based handshake (TicketStore)
+ *   2. Connection rate limiting (WsRateLimiter)
+ *   3. Channel authorization (ChannelGuard)
+ *   4. Message payload validation (MessageValidator)
+ *   5. Periodic re-authentication (ReAuthHandler)
+ *
  * Follows SRP: manages Socket.IO server lifecycle.
- * Follows OCP: auth, channels, and presence are composable.
+ * Follows OCP: auth, channels, security are composable.
  */
 
 import { Server as SocketIOServer } from 'socket.io';
@@ -12,11 +19,23 @@ import type { WebSocketConfig, AuthVerifyFn } from './types.js';
 import { createAuthMiddleware } from './auth.js';
 import { PresenceTracker } from './presence.js';
 import { ChannelManager } from './channel.js';
+import { TicketStore } from './ticket.js';
+import { WsRateLimiter } from './ws-rate-limiter.js';
+import { ChannelGuard } from './channel-guard.js';
+import { MessageValidator } from './message-validator.js';
+import { ReAuthHandler } from './re-auth.js';
 
 export class WebSocketServer {
     private io: SocketIOServer | undefined;
     private readonly presence: PresenceTracker;
     private readonly channels: ChannelManager;
+
+    // ── Security components ──────────────────────────────────
+    private readonly ticketStore: TicketStore | undefined;
+    private readonly rateLimiter: WsRateLimiter;
+    private readonly channelGuard: ChannelGuard;
+    private readonly messageValidator: MessageValidator;
+    private reAuthHandler: ReAuthHandler | undefined;
 
     constructor(
         private readonly config: WebSocketConfig,
@@ -24,6 +43,17 @@ export class WebSocketServer {
     ) {
         this.presence = new PresenceTracker(logger);
         this.channels = new ChannelManager(logger);
+
+        const security = config.security ?? {};
+
+        // Initialize security components
+        if (security.ticket?.enabled !== false) {
+            this.ticketStore = new TicketStore(security.ticket ?? {});
+        }
+
+        this.rateLimiter = new WsRateLimiter(security.rateLimit ?? {});
+        this.channelGuard = new ChannelGuard(security.channels ?? {});
+        this.messageValidator = new MessageValidator(security.messageValidation ?? {});
     }
 
     /**
@@ -47,15 +77,61 @@ export class WebSocketServer {
             maxHttpBufferSize: this.config.maxBufferSize ?? 1_048_576,
         });
 
-        // Auth middleware (optional — only if authVerifyFn is provided)
+        // ── Security Layer 1: Rate Limiting (pre-auth) ───────
+        this.io.use((socket, next) => {
+            const ip = socket.handshake.address;
+            const result = this.rateLimiter.allowConnection(ip);
+
+            if (!result.allowed) {
+                this.logger.warn('WebSocket rate limit: connection denied', {
+                    socketId: socket.id,
+                    ip,
+                    reason: result.reason,
+                });
+                next(new Error(result.reason ?? 'Rate limit exceeded'));
+                return;
+            }
+
+            next();
+        });
+
+        // ── Auth middleware (optional) ────────────────────────
         if (authVerifyFn) {
-            const authMiddleware = createAuthMiddleware(authVerifyFn, this.logger);
+            const security = this.config.security ?? {};
+            const authMiddleware = createAuthMiddleware(authVerifyFn, this.logger, {
+                allowQueryToken: security.allowQueryToken ?? false,
+            });
             this.io.use(authMiddleware as Parameters<SocketIOServer['use']>[0]);
+
+            // ── Security Layer 5: Re-Auth setup ──────────────
+            const reAuthConfig = security.reAuth;
+            if (reAuthConfig?.enabled !== false) {
+                this.reAuthHandler = new ReAuthHandler(authVerifyFn, this.logger, reAuthConfig ?? {});
+            }
         }
 
-        // Connection handler
+        // ── Connection handler ────────────────────────────────
         this.io.on('connection', (socket) => {
-            const userId = (socket.data.user?.id as string | undefined) ?? socket.id;
+            const user = socket.data.user as { id?: string } | undefined;
+            const userId = user?.id ?? socket.id;
+            const ip = socket.handshake.address;
+
+            // ── Security Layer 2: Per-user connection limit ──
+            if (user?.id) {
+                const userResult = this.rateLimiter.allowUserConnection(user.id);
+                if (!userResult.allowed) {
+                    this.logger.warn('WebSocket: user connection limit reached', {
+                        socketId: socket.id,
+                        userId: user.id,
+                        reason: userResult.reason,
+                    });
+                    socket.emit('error', { message: userResult.reason });
+                    socket.disconnect(true);
+                    return;
+                }
+                this.rateLimiter.trackConnection(user.id, socket.id);
+                this.rateLimiter.resetAuthFailures(ip);
+            }
 
             this.presence.connect(userId, socket.id);
 
@@ -64,10 +140,39 @@ export class WebSocketServer {
                 userId,
             });
 
-            // Handle disconnect
+            // ── Security Layer 5: Schedule re-auth ───────────
+            if (this.reAuthHandler && user?.id) {
+                this.reAuthHandler.schedule(
+                    socket.id,
+                    (event, data) => socket.emit(event, data),
+                    () => socket.disconnect(true),
+                );
+
+                // Listen for re-auth token response
+                socket.on('auth:token', async (data: { token?: string }) => {
+                    if (!data?.token || !this.reAuthHandler) return;
+
+                    const renewedUser = await this.reAuthHandler.handleResponse(socket.id, data.token);
+                    if (renewedUser) {
+                        socket.data.user = renewedUser;
+                        socket.emit('auth:renewed', { userId: renewedUser.id });
+                    } else {
+                        socket.emit('auth:failed', { message: 'Token renewal failed' });
+                        socket.disconnect(true);
+                    }
+                });
+            }
+
+            // ── Handle disconnect ────────────────────────────
             socket.on('disconnect', (reason: string) => {
                 this.presence.disconnect(socket.id);
                 this.channels.leaveAll(socket.id);
+
+                if (user?.id) {
+                    this.rateLimiter.removeConnection(user.id, socket.id);
+                }
+
+                this.reAuthHandler?.cleanup(socket.id);
 
                 this.logger.info('WebSocket client disconnected', {
                     socketId: socket.id,
@@ -76,9 +181,41 @@ export class WebSocketServer {
                 });
             });
 
-            // Handle channel join
+            // ── Security Layer 3: Channel join with guard ────
             socket.on('channel:join', (channelName: string) => {
-                const joined = this.channels.join(channelName, socket.id);
+                // Validate channel name
+                if (typeof channelName !== 'string' || channelName.length === 0) {
+                    socket.emit('channel:error', {
+                        channel: channelName,
+                        error: 'Invalid channel name',
+                    });
+                    return;
+                }
+
+                // Check authorization
+                const socketUser = socket.data.user as { id: string; [key: string]: unknown } | undefined;
+                const authResult = this.channelGuard.authorize(channelName, socketUser);
+
+                if (!authResult.allowed) {
+                    this.logger.debug('WebSocket channel guard: access denied', {
+                        socketId: socket.id,
+                        channel: channelName,
+                        reason: authResult.reason,
+                    });
+                    socket.emit('channel:error', {
+                        channel: channelName,
+                        error: authResult.reason ?? 'Access denied',
+                    });
+                    return;
+                }
+
+                // Use rule's maxMembers if defined, otherwise use channel default
+                const maxMembers = authResult.rule?.maxMembers;
+                const joined = this.channels.join(channelName, socket.id, {
+                    maxMembers,
+                    requireAuth: authResult.rule?.requireAuth,
+                });
+
                 if (joined) {
                     void socket.join(channelName);
                     socket.emit('channel:joined', { channel: channelName });
@@ -90,7 +227,7 @@ export class WebSocketServer {
                 }
             });
 
-            // Handle channel leave
+            // ── Handle channel leave ─────────────────────────
             socket.on('channel:leave', (channelName: string) => {
                 this.channels.leave(channelName, socket.id);
                 void socket.leave(channelName);
@@ -101,6 +238,13 @@ export class WebSocketServer {
         this.logger.info('WebSocket server attached', {
             path: this.config.path ?? '/ws',
             corsOrigins: this.config.cors?.origins ?? [],
+            security: {
+                ticketEnabled: !!this.ticketStore,
+                rateLimitEnabled: true,
+                channelGuardEnabled: true,
+                messageValidationEnabled: true,
+                reAuthEnabled: !!this.reAuthHandler,
+            },
         });
 
         return this.io;
@@ -115,6 +259,23 @@ export class WebSocketServer {
     }
 
     /**
+     * Get the ticket store for issuing handshake tickets.
+     * Returns undefined if ticket system is disabled.
+     *
+     * Usage in REST API endpoint:
+     * ```ts
+     * app.post('/api/ws/ticket', (req) => {
+     *   const store = wsServer.getTicketStore();
+     *   const result = store.issue({ userId: req.user.id, ip: req.ip });
+     *   return { ticket: result.ticket, expiresIn: result.expiresIn };
+     * });
+     * ```
+     */
+    getTicketStore(): TicketStore | undefined {
+        return this.ticketStore;
+    }
+
+    /**
      * Get the presence tracker.
      */
     getPresence(): PresenceTracker {
@@ -126,6 +287,20 @@ export class WebSocketServer {
      */
     getChannels(): ChannelManager {
         return this.channels;
+    }
+
+    /**
+     * Get the message validator for validating payloads in custom handlers.
+     */
+    getMessageValidator(): MessageValidator {
+        return this.messageValidator;
+    }
+
+    /**
+     * Get the rate limiter for custom rate limit checks.
+     */
+    getRateLimiter(): WsRateLimiter {
+        return this.rateLimiter;
     }
 
     /**
@@ -168,6 +343,9 @@ export class WebSocketServer {
             });
             this.presence.clear();
             this.channels.clear();
+            this.rateLimiter.destroy();
+            this.ticketStore?.destroy();
+            this.reAuthHandler?.destroy();
             this.logger.info('WebSocket server shut down.');
         }
     }
@@ -182,3 +360,4 @@ export function createWebSocketServer(
 ): WebSocketServer {
     return new WebSocketServer(config, logger);
 }
+

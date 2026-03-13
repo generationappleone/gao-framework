@@ -48,8 +48,26 @@ describe('Auth Middleware', () => {
         expect(next).toHaveBeenCalledWith();
     });
 
-    it('should authenticate with token from query', async () => {
+    it('should REJECT query token by default (security: tokens in URLs leak in logs)', async () => {
         const middleware = createAuthMiddleware(verifyFn, logger as any);
+        const socket = createMockSocket(undefined, 'query-token');
+        const next = vi.fn();
+
+        await middleware(socket, next);
+
+        // Query token should NOT be used — verifyFn should NOT be called
+        expect(verifyFn).not.toHaveBeenCalled();
+        expect(next).toHaveBeenCalledWith(expect.any(Error));
+        expect((next.mock.calls[0] as [Error])[0]?.message).toBe('Authentication required');
+        // Should warn about rejected query token
+        expect(logger.warn).toHaveBeenCalledWith(
+            expect.stringContaining('query token rejected'),
+            expect.any(Object),
+        );
+    });
+
+    it('should ALLOW query token when allowQueryToken is explicitly true', async () => {
+        const middleware = createAuthMiddleware(verifyFn, logger as any, { allowQueryToken: true });
         const socket = createMockSocket(undefined, 'query-token');
         const next = vi.fn();
 
@@ -57,6 +75,17 @@ describe('Auth Middleware', () => {
 
         expect(verifyFn).toHaveBeenCalledWith('query-token');
         expect(next).toHaveBeenCalledWith();
+    });
+
+    it('should prefer auth token over query token when both present', async () => {
+        const middleware = createAuthMiddleware(verifyFn, logger as any, { allowQueryToken: true });
+        const socket = createMockSocket('auth-token', 'query-token');
+        const next = vi.fn();
+
+        await middleware(socket, next);
+
+        // Auth token has priority
+        expect(verifyFn).toHaveBeenCalledWith('auth-token');
     });
 
     it('should reject if no token provided', async () => {

@@ -1,5 +1,6 @@
 /**
  * @gao/ui — Admin CSS Design System
+ * GAO Corporate Identity: White + Black + Dark Blue
  *
  * Complete CSS design system for GaoAdmin template (~1500 lines).
  * Features: HSL color tokens, dark/light mode, glassmorphism,
@@ -13,24 +14,24 @@
 
 const COLOR_SYSTEM = `
 /* ═══════════════════════════════════════════════════════════
- * GaoAdmin — Design System v0.5.0
+ * GaoAdmin — Design System v0.6.0 — GAO Corporate Identity
  * HSL Semantic Color Tokens + Dark/Light Mode
  * ═══════════════════════════════════════════════════════════ */
 
 :root {
-  /* ── Primary Palette ── */
-  --gao-primary-h: 230;
-  --gao-primary-s: 80%;
-  --gao-primary-l: 56%;
+  /* ── Primary Palette: Slightly Dark Blue ── */
+  --gao-primary-h: 215;
+  --gao-primary-s: 70%;
+  --gao-primary-l: 40%;
   --gao-primary: hsl(var(--gao-primary-h), var(--gao-primary-s), var(--gao-primary-l));
-  --gao-primary-light: hsl(var(--gao-primary-h), var(--gao-primary-s), 70%);
-  --gao-primary-dark: hsl(var(--gao-primary-h), var(--gao-primary-s), 44%);
+  --gao-primary-light: hsl(var(--gao-primary-h), var(--gao-primary-s), 55%);
+  --gao-primary-dark: hsl(var(--gao-primary-h), var(--gao-primary-s), 30%);
   --gao-primary-bg: hsl(var(--gao-primary-h), var(--gao-primary-s), 96%);
 
-  /* ── Accent ── */
-  --gao-accent-h: 270;
-  --gao-accent-s: 70%;
-  --gao-accent-l: 60%;
+  /* ── Accent: Steel Blue ── */
+  --gao-accent-h: 215;
+  --gao-accent-s: 50%;
+  --gao-accent-l: 50%;
   --gao-accent: hsl(var(--gao-accent-h), var(--gao-accent-s), var(--gao-accent-l));
 
   /* ── Semantic Colors ── */
@@ -43,31 +44,31 @@ const COLOR_SYSTEM = `
   --gao-info: hsl(200, 80%, 50%);
   --gao-info-bg: hsl(200, 80%, 96%);
 
-  /* ── Neutral Scale ── */
-  --gao-gray-50: hsl(220, 14%, 97%);
-  --gao-gray-100: hsl(220, 14%, 94%);
-  --gao-gray-200: hsl(220, 13%, 88%);
-  --gao-gray-300: hsl(218, 12%, 78%);
-  --gao-gray-400: hsl(218, 10%, 62%);
-  --gao-gray-500: hsl(218, 10%, 46%);
-  --gao-gray-600: hsl(218, 12%, 34%);
-  --gao-gray-700: hsl(218, 14%, 24%);
-  --gao-gray-800: hsl(218, 18%, 16%);
-  --gao-gray-900: hsl(218, 22%, 10%);
-  --gao-gray-950: hsl(218, 28%, 6%);
+  /* ── Neutral Scale (Cool Gray 215°) ── */
+  --gao-gray-50: hsl(215, 15%, 97%);
+  --gao-gray-100: hsl(215, 15%, 94%);
+  --gao-gray-200: hsl(215, 14%, 88%);
+  --gao-gray-300: hsl(215, 12%, 78%);
+  --gao-gray-400: hsl(215, 10%, 62%);
+  --gao-gray-500: hsl(215, 10%, 46%);
+  --gao-gray-600: hsl(215, 12%, 34%);
+  --gao-gray-700: hsl(215, 14%, 24%);
+  --gao-gray-800: hsl(215, 18%, 16%);
+  --gao-gray-900: hsl(215, 22%, 10%);
+  --gao-gray-950: hsl(215, 28%, 6%);
 
-  /* ── Surface (Light Mode) ── */
-  --gao-bg: hsl(220, 14%, 97%);
+  /* ── Surface (Light Mode — White) ── */
+  --gao-bg: hsl(215, 15%, 97%);
   --gao-surface: #ffffff;
   --gao-surface-raised: #ffffff;
   --gao-surface-overlay: rgba(255, 255, 255, 0.8);
-  --gao-border: hsl(220, 13%, 88%);
-  --gao-border-light: hsl(220, 14%, 94%);
+  --gao-border: hsl(215, 15%, 88%);
+  --gao-border-light: hsl(215, 15%, 93%);
 
-  /* ── Text ── */
-  --gao-text: hsl(218, 22%, 10%);
-  --gao-text-secondary: hsl(218, 10%, 46%);
-  --gao-text-muted: hsl(218, 10%, 62%);
+  /* ── Text (Near Black) ── */
+  --gao-text: hsl(215, 25%, 8%);
+  --gao-text-secondary: hsl(215, 10%, 40%);
+  --gao-text-muted: hsl(215, 10%, 55%);
   --gao-text-inverse: #ffffff;
 
   /* ── Shadows ── */
@@ -124,16 +125,16 @@ const DARK_MODE = `
 /* ── Dark Mode ── */
 [data-theme="dark"],
 .gao-admin-dark {
-  --gao-bg: hsl(218, 22%, 8%);
-  --gao-surface: hsl(218, 18%, 12%);
-  --gao-surface-raised: hsl(218, 18%, 16%);
-  --gao-surface-overlay: rgba(20, 22, 30, 0.85);
-  --gao-border: hsl(218, 14%, 22%);
-  --gao-border-light: hsl(218, 14%, 18%);
+  --gao-bg: hsl(215, 25%, 8%);
+  --gao-surface: hsl(215, 20%, 12%);
+  --gao-surface-raised: hsl(215, 20%, 16%);
+  --gao-surface-overlay: rgba(15, 19, 24, 0.85);
+  --gao-border: hsl(215, 15%, 22%);
+  --gao-border-light: hsl(215, 15%, 18%);
 
-  --gao-text: hsl(220, 14%, 94%);
-  --gao-text-secondary: hsl(218, 10%, 62%);
-  --gao-text-muted: hsl(218, 10%, 46%);
+  --gao-text: hsl(215, 15%, 94%);
+  --gao-text-secondary: hsl(215, 10%, 62%);
+  --gao-text-muted: hsl(215, 10%, 46%);
 
   --gao-success-bg: hsl(152, 60%, 12%);
   --gao-warning-bg: hsl(38, 92%, 12%);
@@ -146,21 +147,21 @@ const DARK_MODE = `
   --gao-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
   --gao-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
 
-  --gao-glass-bg: rgba(20, 22, 30, 0.75);
+  --gao-glass-bg: rgba(15, 19, 24, 0.75);
   --gao-glass-border: rgba(255, 255, 255, 0.08);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --gao-bg: hsl(218, 22%, 8%);
-    --gao-surface: hsl(218, 18%, 12%);
-    --gao-surface-raised: hsl(218, 18%, 16%);
-    --gao-surface-overlay: rgba(20, 22, 30, 0.85);
-    --gao-border: hsl(218, 14%, 22%);
-    --gao-border-light: hsl(218, 14%, 18%);
-    --gao-text: hsl(220, 14%, 94%);
-    --gao-text-secondary: hsl(218, 10%, 62%);
-    --gao-text-muted: hsl(218, 10%, 46%);
+    --gao-bg: hsl(215, 25%, 8%);
+    --gao-surface: hsl(215, 20%, 12%);
+    --gao-surface-raised: hsl(215, 20%, 16%);
+    --gao-surface-overlay: rgba(15, 19, 24, 0.85);
+    --gao-border: hsl(215, 15%, 22%);
+    --gao-border-light: hsl(215, 15%, 18%);
+    --gao-text: hsl(215, 15%, 94%);
+    --gao-text-secondary: hsl(215, 10%, 62%);
+    --gao-text-muted: hsl(215, 10%, 46%);
     --gao-success-bg: hsl(152, 60%, 12%);
     --gao-warning-bg: hsl(38, 92%, 12%);
     --gao-danger-bg: hsl(350, 72%, 12%);
@@ -170,7 +171,7 @@ const DARK_MODE = `
     --gao-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
     --gao-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
     --gao-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
-    --gao-glass-bg: rgba(20, 22, 30, 0.75);
+    --gao-glass-bg: rgba(15, 19, 24, 0.75);
     --gao-glass-border: rgba(255, 255, 255, 0.08);
   }
 }`;
@@ -766,19 +767,19 @@ const RESPONSIVE = `
  * utilities, animations, and responsive breakpoints.
  */
 export const adminCSS: string = [
-    COLOR_SYSTEM,
-    DARK_MODE,
-    RESET_AND_TYPOGRAPHY,
-    LAYOUT,
-    COMPONENTS,
-    UTILITIES,
-    ANIMATIONS,
-    RESPONSIVE,
+  COLOR_SYSTEM,
+  DARK_MODE,
+  RESET_AND_TYPOGRAPHY,
+  LAYOUT,
+  COMPONENTS,
+  UTILITIES,
+  ANIMATIONS,
+  RESPONSIVE,
 ].join('\n');
 
 /**
  * Generate `<style>` tag containing the full admin CSS.
  */
 export function injectAdminCSS(): string {
-    return `<style id="gao-admin-styles">\n${adminCSS}\n</style>`;
+  return `<style id="gao-admin-styles">\n${adminCSS}\n</style>`;
 }
